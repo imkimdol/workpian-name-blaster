@@ -1,3 +1,4 @@
+let isBlastin = false;
 let currentUrl = location.href;
 
 function replaceNames() {
@@ -18,12 +19,25 @@ function waitForJSLoadThenReplaceNames() {
 
 function checkForURLChanges() {
     setInterval(() => {
-        if (location.href !== currentUrl) {
+        if (isBlastin && location.href !== currentUrl) {
             currentUrl = location.href;
             waitForJSLoadThenReplaceNames();
         }
     }, 500);
 }
 
-waitForJSLoadThenReplaceNames();
 checkForURLChanges();
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'startBlastin') {
+        replaceNames()
+        isBlastin = true
+        sendResponse();
+    } else if (message.action === 'stopBlastin') {
+        isBlastin = false
+        window.location.reload();
+        sendResponse();
+    } else if (message.action === 'isBlastin?') {
+        sendResponse(isBlastin);
+    }
+});
