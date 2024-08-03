@@ -1,14 +1,15 @@
+let currentUrl = location.href;
 
-const replaceNames = () => {
-    const html = document.body.innerHTML;
+function replaceNames() {
+    const allElements = document.getElementsByTagName('*');
 
-    const regex = />\w*\s\w*\s\(\d{8}\)</g;
-    const replacement = html.replace(regex, (s) => {
-        var newString = s.replace(/[a-zA-Z]+/g, "xxxxx");
-        return newString;
-    });
+    const regex = /^\w+\s\w+\s\(\d{8}\)$/;
+    for (e of allElements) {
+        const content = e.innerText;
+        if (regex.test(content)) {
+            e.innerText = content.replace(/[a-zA-Z]+/g, "xxxxx");
+        }
+    }
+}
 
-    document.body.innerHTML = replacement;
-};
-
-setTimeout(replaceNames, 3000);
+setTimeout(replaceNames, 2000);
