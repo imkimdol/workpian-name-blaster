@@ -14,7 +14,7 @@ function replaceNames() {
 }
 
 function waitForJSLoadThenReplaceNames() {
-    setTimeout(replaceNames, 2000);
+    setTimeout(replaceNames, 500);
 }
 
 function checkForURLChanges() {
@@ -23,7 +23,7 @@ function checkForURLChanges() {
             currentUrl = location.href;
             waitForJSLoadThenReplaceNames();
         }
-    }, 500);
+    }, 250);
 }
 
 checkForURLChanges();
