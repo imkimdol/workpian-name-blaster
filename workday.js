@@ -12,4 +12,18 @@ function replaceNames() {
     }
 }
 
-setTimeout(replaceNames, 2000);
+function waitForJSLoadThenReplaceNames() {
+    setTimeout(replaceNames, 2000);
+}
+
+function checkForURLChanges() {
+    setInterval(() => {
+        if (location.href !== currentUrl) {
+            currentUrl = location.href;
+            waitForJSLoadThenReplaceNames();
+        }
+    }, 500);
+}
+
+waitForJSLoadThenReplaceNames();
+checkForURLChanges();
