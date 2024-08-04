@@ -3,7 +3,7 @@ type ElementContainer = {
 };
 
 const blastText = "Blast!"
-const unblastText = "Unblast..."
+const unblastText = "Unblast"
 
 function getElements(): ElementContainer {
     const blastButton = document.getElementById('blastButton') as HTMLButtonElement | null;

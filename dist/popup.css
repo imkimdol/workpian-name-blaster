@@ -1,10 +1,8 @@
 body {
-  width: 300px;
+  padding: 1px;
+  width: 280px;
   font-family: 'lato';
   transition-behavior: allow-discrete;
-}
-body.blastin {
-  background-image: radial-gradient(circle at 50% 75%, #F69F1A, #0078c8 95%);
 }
 
 .bg {
@@ -18,11 +16,11 @@ body.blastin {
   transition: opacity 1s ease;
 }
 .bg1 {
-  background-image: radial-gradient(circle at 50% 79%, #F69F1A, #0078c8 95%);
+  background-image: radial-gradient(circle at 50% 77%, #F69F1A, #0078c8 90%);
   opacity: 1;
 }
 .bg2 {
-  background-image: radial-gradient(circle at 50% 79%, #0078c8, #F69F1A 95%);
+  background-image: radial-gradient(circle at 50% 77%, #0078c8, #F69F1A 90%);
   opacity: 0;
 }
 body.blastin div.bg1 {
@@ -48,7 +46,7 @@ button {
 }
 
 .title {
-  margin: 12px 0px;
+  margin: 16px 0px;
   text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.8);
 }
 
