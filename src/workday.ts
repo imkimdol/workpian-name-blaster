@@ -17,11 +17,11 @@ function replaceNames(node: Node | null) {
 function replaceName(node: Node) {
     if (!parent) return;
 
-    const regex = /^\w+\s\w+\s\(\d{8}\)$/;
+    const regex = /^(\S+\s+)+\(\d{8}\)$/;
     if (node.nodeType === Node.TEXT_NODE) {
         const value = node.nodeValue;
         if (value && regex.test(value)) {
-            node.nodeValue = value.replace(/[a-zA-Z]+/g, "xxxxx");
+            node.nodeValue = value.replace(/[a-zA-Z]+/g, "-----");
         }
     }
 }
