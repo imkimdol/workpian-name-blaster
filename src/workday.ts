@@ -22,11 +22,13 @@ function replaceNSIDNames(node: Node | null) {
 function replaceNSIDName(node: Node) {
     if (!parent) return;
 
-    const regex = /^(\S+\s+)+\(\d{8}\)$/;
+    const regex = /^(\S+\s+)+\(\d{8}\).*$/;
     if (node.nodeType === Node.TEXT_NODE) {
         const value = node.nodeValue;
         if (value && regex.test(value)) {
-            node.nodeValue = replaceAlphaCharsWithDashes(value);
+            const beforeStuID = value.split(/\d/)[0];
+            const censored = replaceAlphaCharsWithDashes(beforeStuID);
+            node.nodeValue = value.replace(beforeStuID, censored);
         }
     }
 }
