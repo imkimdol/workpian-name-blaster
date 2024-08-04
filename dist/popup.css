@@ -1,3 +1,83 @@
 body {
   width: 300px;
+  font-family: 'lato';
+  transition-behavior: allow-discrete;
+}
+body.blastin {
+  background-image: radial-gradient(circle at 50% 75%, #F69F1A, #0078c8 95%);
+}
+
+.bg {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  transition: opacity 1s ease;
+}
+.bg1 {
+  background-image: radial-gradient(circle at 50% 79%, #F69F1A, #0078c8 95%);
+  opacity: 1;
+}
+.bg2 {
+  background-image: radial-gradient(circle at 50% 79%, #0078c8, #F69F1A 95%);
+  opacity: 0;
+}
+body.blastin div.bg1 {
+  opacity: 0;
+}
+body.blastin div.bg2 {
+  opacity: 1;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+  margin: 5px auto;
+}
+p {
+  color: white;
+  text-align: center;
+  margin: auto;
+}
+button {
+  font-family: 'lato';
+  color: white;
+}
+
+.title {
+  margin: 12px 0px;
+  text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.8);
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0px;
+}
+.buttons button {
+  font-size: 18px;
+  font-weight: 400;
+  text-decoration: none;
+  text-align: center;
+
+  padding: 8px 10px;
+  border-radius: 30px;
+
+  border-style: solid;
+  border: 0;
+  background-color: #141414aa;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3);
+
+  transition: background-color 0.15s;
+}
+.buttons button:hover {
+  background-color: #383838aa;
+}
+.buttons button:disabled {
+  user-select: none;
+  color: #ffffff55;
+  background-color: #31313155;  
 }
