@@ -22,7 +22,13 @@ async function getActiveTabId(): Promise<number> {
 }
 
 function setHTML(elements: ElementContainer, isBlastin: boolean) {
-    elements.blastButton.innerText = !isBlastin ? blastText : unblastText;
+    if (isBlastin) {
+        elements.blastButton.innerText = unblastText;
+        document.body.classList.add("blastin");
+    } else {
+        elements.blastButton.innerText = blastText;
+        document.body.classList.remove("blastin");
+    }
 }
 
 function addEventListeners(elements: ElementContainer, isBlastin: boolean, activeTabId: number) {
