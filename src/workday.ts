@@ -5,7 +5,7 @@ function replaceNames() {
     const allElements = document.getElementsByTagName('*');
 
     const regex = /^\w+\s\w+\s\(\d{8}\)$/;
-    for (e of allElements) {
+    for (const e of Array.from(allElements) as Array<HTMLElement>) {
         const content = e.innerText;
         if (regex.test(content)) {
             e.innerText = content.replace(/[a-zA-Z]+/g, "xxxxx");
