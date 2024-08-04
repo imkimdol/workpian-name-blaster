@@ -26,21 +26,6 @@ function replaceName(node: Node) {
     }
 }
 
-function waitForJSLoadThenReplaceNames() {
-    setTimeout(replaceNames, 500);
-}
-
-function checkForURLChanges() {
-    setInterval(() => {
-        if (isBlastin && location.href !== currentUrl) {
-            currentUrl = location.href;
-            waitForJSLoadThenReplaceNames();
-        }
-    }, 250);
-}
-
-checkForURLChanges();
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'startBlastin') {
         replaceNames(null)
@@ -54,3 +39,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse(isBlastin);
     }
 });
+
+setInterval(() => {if (isBlastin) replaceNames(null);}, 1000);
