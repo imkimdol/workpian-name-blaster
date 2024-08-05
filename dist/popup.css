@@ -17,7 +17,7 @@ body {
   background-position: center;
 }
 .bg1 {
-  background-image: radial-gradient(circle at 50% 77%, #a96d13, #005994 75%);
+  background-image: radial-gradient(circle at 50% 77%, #a96d13, #003355 75%);
   opacity: 1;
 }
 .bg2 {
@@ -139,7 +139,7 @@ body.blastin .buttons .border:hover {
   -webkit-text-fill-color: transparent;
 }
 body.blastin .buttons button p {
-  text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
+  text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.6);
   
   background: repeating-linear-gradient(to right, #fbfff2, #a6ffa0, #fbfff2);
   background-size: 600% 600%;
