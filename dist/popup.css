@@ -17,7 +17,7 @@ body {
   background-position: center;
 }
 .bg1 {
-  background-image: radial-gradient(circle at 50% 77%, #a96d13, #005994 90%);
+  background-image: radial-gradient(circle at 50% 77%, #a96d13, #005994 75%);
   opacity: 1;
 }
 .bg2 {
