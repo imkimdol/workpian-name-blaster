@@ -2,8 +2,8 @@ type ElementContainer = {
     blastButton: HTMLButtonElement
 };
 
-const blastText = "Blast!"
-const unblastText = "Unblast"
+const blastText = "<p>Blast!</p>"
+const unblastText = "<p>Unblast</p>"
 
 function getElements(): ElementContainer {
     const blastButton = document.getElementById('blastButton') as HTMLButtonElement | null;
@@ -23,10 +23,10 @@ async function getActiveTabId(): Promise<number> {
 
 function setHTML(elements: ElementContainer, isBlastin: boolean) {
     if (isBlastin) {
-        elements.blastButton.innerText = unblastText;
+        elements.blastButton.innerHTML = unblastText;
         document.body.classList.add("blastin");
     } else {
-        elements.blastButton.innerText = blastText;
+        elements.blastButton.innerHTML = blastText;
         document.body.classList.remove("blastin");
     }
 }
@@ -36,12 +36,12 @@ function addEventListeners(elements: ElementContainer, isBlastin: boolean, activ
         if (!isBlastin) {
             chrome.tabs.sendMessage(activeTabId, {action: 'startBlastin'}, () => {});
             isBlastin = true;
-            elements.blastButton.innerText = unblastText;
+            elements.blastButton.innerHTML = unblastText;
             document.body.classList.add("blastin");
         } else {
             chrome.tabs.sendMessage(activeTabId, {action: 'stopBlastin'}, () => {});
             isBlastin = false;
-            elements.blastButton.innerText = blastText;
+            elements.blastButton.innerHTML = blastText;
             document.body.classList.remove("blastin");
         }
     });

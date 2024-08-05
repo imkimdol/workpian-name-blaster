@@ -16,7 +16,7 @@ body {
   transition: opacity 1s ease;
 }
 .bg1 {
-  background-image: radial-gradient(circle at 50% 77%, #F69F1A, #0078c8 90%);
+  background-image: radial-gradient(circle at 50% 77%, #be7b16, #005994 90%);
   opacity: 1;
 }
 .bg2 {
@@ -31,14 +31,24 @@ body.blastin div.bg2 {
 }
 
 h1 {
-  color: white;
+  color: rgb(234, 234, 234);
   text-align: center;
   margin: 5px auto;
+
+  transform: color 1s ease;
 }
 p {
-  color: white;
+  color: rgb(234, 234, 234);
   text-align: center;
   margin: auto;
+
+  transform: color 1s ease;
+}
+body.blastin h1 {
+  color: white;
+}
+body.blastin p {
+  color: white;
 }
 button {
   font-family: 'lato';
@@ -49,6 +59,7 @@ button {
   margin: 16px 0px;
   text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.8);
 }
+
 
 .buttons {
   display: flex;
@@ -66,16 +77,64 @@ button {
 
   border-style: solid;
   border: 0;
-  background-color: #141414aa;
+  background-color: #0a0a0aaa;
   box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3);
 
   transition: background-color 0.15s;
 }
 .buttons button:hover {
-  background-color: #383838aa;
+  background-color: #343434aa;
 }
 .buttons button:disabled {
   user-select: none;
-  color: #ffffff55;
   background-color: #31313155;  
+}
+
+.buttons button p {
+  background-attachment: fixed;
+  text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.3);
+  color: rgb(234, 234, 234);
+  transition: text-shadow 0.3s;
+}
+.buttons button:hover p {
+  text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.6);
+
+  background: repeating-linear-gradient(to right, #4af9ff, #ff31ff, #4af9ff);
+  background-size: 600% 600%;
+  animation: gradient 8s linear infinite;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.blastin .buttons button p {
+  text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
+  
+  background: repeating-linear-gradient(to right, #e6ffab, #bdffb8, #e6ffab);
+  background-size: 600% 600%;
+  animation: gradient 8s linear infinite;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.buttons button:disabled p {
+  text-shadow: none;
+  color: #ffffff55;
+}
+.buttons button:disabled:hover p {
+  text-shadow: none;
+  background: #ffffff55;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: -200% 50%;
+	}
+	100% {
+		background-position: 200% 50%;
+	}
 }
