@@ -47,12 +47,20 @@ function scanTable(table: HTMLTableElement) {
 }
 function scanHead(head: HTMLTableSectionElement): boolean[] {
     const isNameColumnArr: boolean[] = [];
-    const row = head.rows[0]; // Assume one row for head
-    const cells = Array.from(row.cells);
+    const rows = Array.from(head.rows);
 
-    cells.forEach(c => isNameColumnArr.push(checkHeadCellText(c)));
+    rows.forEach(r => scanHeadRow(r, isNameColumnArr));
 
     return isNameColumnArr;
+}
+function scanHeadRow(row: HTMLTableRowElement, isNameColumnArr: boolean[]) {
+    const cells = Array.from(row.cells);
+    cells.forEach(c => {
+        const scope = c.getAttribute("scope");
+        if (!scope || scope !== "col") return;
+
+        isNameColumnArr.push(checkHeadCellText(c));
+    });
 }
 function checkHeadCellText(cell: HTMLTableCellElement) {
     return cell.innerText.includes("Name") || cell.innerText.includes("Student");
