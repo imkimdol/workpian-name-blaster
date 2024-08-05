@@ -1,4 +1,5 @@
 type ElementContainer = {
+    border: HTMLButtonElement;
     blastButton: HTMLButtonElement
 };
 
@@ -6,10 +7,12 @@ const blastText = "<p>Blast!</p>"
 const unblastText = "<p>Unblast</p>"
 
 function getElements(): ElementContainer {
+    const border = document.getElementById('border') as HTMLButtonElement | null;
     const blastButton = document.getElementById('blastButton') as HTMLButtonElement | null;
+    if (!border) throw new Error("Border not found!");
     if (!blastButton) throw new Error("Blast button not found!");
     
-    return {blastButton};
+    return {border, blastButton};
 }
 
 async function getActiveTabId(): Promise<number> {
@@ -57,6 +60,7 @@ async function run() {
         setHTML(elements, isBlastin);
         addEventListeners(elements, isBlastin, activeTabId);
     } catch {
+        elements.border.classList.add("disabled");
         elements.blastButton.disabled = true;
     }
 };

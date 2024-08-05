@@ -14,14 +14,17 @@ body {
   top: 0;
   left: 0;
   transition: opacity 1s ease;
+  background-position: center;
 }
 .bg1 {
-  background-image: radial-gradient(circle at 50% 77%, #be7b16, #005994 90%);
+  background-image: radial-gradient(circle at 50% 77%, #a96d13, #005994 90%);
   opacity: 1;
 }
 .bg2 {
-  background-image: radial-gradient(circle at 50% 77%, #0078c8, #F69F1A 90%);
+  background-image: radial-gradient(circle at 50% 77%, #0090f1, #ffaf37 75%);
   opacity: 0;
+
+  animation: blastin-background 12s ease infinite;
 }
 body.blastin div.bg1 {
   opacity: 0;
@@ -44,14 +47,14 @@ p {
 
   transform: color 1s ease;
 }
+button {
+  font-family: 'lato';
+  color: white;
+}
 body.blastin h1 {
   color: white;
 }
 body.blastin p {
-  color: white;
-}
-button {
-  font-family: 'lato';
   color: white;
 }
 
@@ -59,13 +62,16 @@ button {
   margin: 16px 0px;
   text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.8);
 }
-
+body.blastin .title {
+  text-shadow: 0px 0px 3px rgba(#a6ffa0), 3px 3px 15px rgba(0, 0, 0, 0.8);
+}
 
 .buttons {
   display: flex;
   justify-content: center;
   margin: 12px 0px;
 }
+
 .buttons button {
   font-size: 18px;
   font-weight: 400;
@@ -73,7 +79,8 @@ button {
   text-align: center;
 
   padding: 8px 10px;
-  border-radius: 30px;
+  border-radius: 32px;
+  display: inline-flex;
 
   border-style: solid;
   border: 0;
@@ -90,18 +97,42 @@ button {
   background-color: #31313155;  
 }
 
+.buttons .border {
+  border: double 1px transparent;
+  background-image: linear-gradient(#00000000, #00000000);
+  border-radius: 32px;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation: gradient 8s linear infinite;
+}
+.buttons .border:hover {
+  background: repeating-linear-gradient(to right, #4af9ff, #ff31ff, #4af9ff);
+  background-size: 600% 600%;
+}
+body.blastin .buttons .border {
+  background: repeating-linear-gradient(to right, #858585, #71976e, #858585);
+  background-size: 600% 600%;
+}
+body.blastin .buttons .border:hover {
+  background: repeating-linear-gradient(to right, #d1ddb5, #729f6f, #d1ddb5);
+  background-size: 600% 600%;
+}
+.buttons .border.disabled:hover {
+  background-image: linear-gradient(#00000000, #00000000);
+}
+
 .buttons button p {
   background-attachment: fixed;
   text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.3);
   color: rgb(234, 234, 234);
   transition: text-shadow 0.3s;
+  animation: gradient 8s linear infinite;
 }
 .buttons button:hover p {
   text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.6);
 
   background: repeating-linear-gradient(to right, #4af9ff, #ff31ff, #4af9ff);
   background-size: 600% 600%;
-  animation: gradient 8s linear infinite;
 
   background-clip: text;
   -webkit-background-clip: text;
@@ -110,9 +141,8 @@ button {
 body.blastin .buttons button p {
   text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
   
-  background: repeating-linear-gradient(to right, #e6ffab, #bdffb8, #e6ffab);
+  background: repeating-linear-gradient(to right, #fbfff2, #a6ffa0, #fbfff2);
   background-size: 600% 600%;
-  animation: gradient 8s linear infinite;
 
   background-clip: text;
   -webkit-background-clip: text;
@@ -136,5 +166,16 @@ body.blastin .buttons button p {
 	}
 	100% {
 		background-position: 200% 50%;
+	}
+}
+@keyframes blastin-background {
+	0% {
+		background-size: 100%;
+	}
+  50% {
+    background-size: 150%
+  }
+	100% {
+		background-size: 100%
 	}
 }
