@@ -20,8 +20,6 @@ function replaceNSIDNames(node: Node | null) {
     children.forEach(c => replaceNSIDNames(c));
 }
 function replaceNSIDName(node: Node) {
-    if (!parent) return;
-
     const regex = /^(\S+\s+)+\(\d{8}\).*$/;
     if (node.nodeType === Node.TEXT_NODE) {
         const value = node.nodeValue;
