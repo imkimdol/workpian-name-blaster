@@ -133,4 +133,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
-//setInterval(() => {if (isBlastin) replaceNames();}, 1000);
+setInterval(() => {if (isBlastin) replaceNames();}, 1000);
