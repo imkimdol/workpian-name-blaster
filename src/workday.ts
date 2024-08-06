@@ -90,7 +90,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse();
     } else if (message.action === 'stopBlastin') {
         isBlastin = false
-        window.location.reload();
         sendResponse();
     } else if (message.action === 'isBlastin?') {
         sendResponse(isBlastin);
