@@ -61,7 +61,7 @@ function scanHeadRow(row: HTMLTableRowElement, isNameColumnArr: boolean[]) {
     });
 }
 function checkHeadCellText(cell: HTMLTableCellElement) {
-    return cell.innerText.includes("Name") || cell.innerText.includes("Student");
+    return cell.innerText.includes("Name") || cell.innerText.includes("Student") || cell.innerText.includes("Academic Record");
 }
 function scanBody(body: HTMLTableSectionElement, isNameColumnArr: boolean[]) {
     const rows = Array.from(body.rows);
