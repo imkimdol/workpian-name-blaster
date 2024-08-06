@@ -45,7 +45,7 @@ function scanLI(element: HTMLElement) {
     
     if (isName) children.forEach((c, index) => {
         if (index === 0) return;
-        replaceListName(c);
+        replaceNodeName(c);
     });
 }
 function checkChildHasName(node: Node): boolean {
@@ -61,16 +61,6 @@ function checkChildHasName(node: Node): boolean {
     if (value && node.nodeType === Node.TEXT_NODE) return value.includes("Name");
 
     return false
-}
-function replaceListName(node: Node) {
-    const children = node.childNodes;
-
-    if (children.length === 0 && node.nodeValue && node.nodeType === Node.TEXT_NODE) {
-        node.nodeValue = replaceAlphaCharsWithDashes(node.nodeValue);
-        return;
-    }
-
-    children.forEach(c => replaceListName(c));
 }
 
 function replaceTableNames() {
@@ -111,14 +101,21 @@ function scanBody(body: HTMLTableSectionElement, isNameColumnArr: boolean[]) {
 }
 function scanBodyRow(row: HTMLTableRowElement, isNameColumnArr: boolean[]) {
     const cells = Array.from(row.cells);
-
     cells.forEach((cell, index) => {
-        if (isNameColumnArr[index]) {
-            cell.innerText = replaceAlphaCharsWithDashes(cell.innerText);
-        }
+        if (isNameColumnArr[index]) replaceNodeName(cell);
     });
 }
 
+function replaceNodeName(node: Node) {
+    const children = node.childNodes;
+
+    if (children.length === 0 && node.nodeValue && node.nodeType === Node.TEXT_NODE) {
+        node.nodeValue = replaceAlphaCharsWithDashes(node.nodeValue);
+        return;
+    }
+
+    children.forEach(c => replaceNodeName(c));
+}
 function replaceAlphaCharsWithDashes(source: string): string {
     return source.replace(/[a-zA-Z]+/g, "-----");
 }
