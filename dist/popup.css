@@ -152,11 +152,10 @@ body.blastin .buttons button p {
   color: #ffffff55;
 }
 .buttons button:disabled:hover p {
-  text-shadow: none;
-  background: #ffffff55;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: none;
+  background-clip: inherit;
+  -webkit-background-clip: inherit;
+  -webkit-text-fill-color: inherit;
 }
 
 @keyframes gradient {
