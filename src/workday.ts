@@ -127,8 +127,9 @@ function replaceNodeName(node: Node) {
 }
 function replaceName(text: string): string {
     const beforeStuID = text.split(/\d/)[0];
-    const censored = replaceAlphaCharsWithDashes(beforeStuID);
-    return text.replace(beforeStuID, censored);
+    const beforeColon = beforeStuID.split(":")[0];
+    const censored = replaceAlphaCharsWithDashes(beforeColon);
+    return text.replace(beforeColon, censored);
 }
 function replaceAlphaCharsWithDashes(source: string): string {
     return source.replace(/[a-zA-Z]+/g, "-----");
