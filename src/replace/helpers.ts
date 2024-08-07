@@ -1,4 +1,4 @@
-enum BiographicType {None, Name, Other};
+export enum BiographicType {None, Name, Other};
 
 const flaggedNameLabels = ["Name", "Student", "Academic Record"];
 const flaggedOtherLabels = [

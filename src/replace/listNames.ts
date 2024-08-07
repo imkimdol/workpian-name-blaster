@@ -1,4 +1,4 @@
-enum BiographicType {None, Name, Other};
+import type { BiographicType } from './helpers';
 
 const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
 const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
@@ -32,5 +32,5 @@ function checkLabelForFlaggedText(node: Node): BiographicType {
     const value = node.nodeValue;
     if (value && node.nodeType === Node.TEXT_NODE) return checkForFlaggedText(value);
 
-    return BiographicType.None;
+    return 0;
 }

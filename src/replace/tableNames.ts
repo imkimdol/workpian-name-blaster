@@ -1,4 +1,4 @@
-enum BiographicType {None, Name, Other};
+import type { BiographicType } from './helpers';
 
 const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
 const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
