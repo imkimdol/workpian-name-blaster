@@ -1,8 +1,8 @@
 enum BiographicType {None, Name, Other};
 
 const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
-const textIncludesFlaggedWord: (text: string) => boolean = helpers.textIncludesFlaggedWord;
-const replaceNodeName: (node: Node) => void = helpers.textIncludesFlaggedWord;
+const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
+const replaceNodeText: (node: Node, bioType: BiographicType) => void = helpers.replaceNodeText;
 
 export default function replaceListNames() {
     const LIs = Array.from(document.getElementsByTagName("li"));
@@ -13,27 +13,24 @@ function scanLI(element: HTMLElement) {
     if (children.length < 2) return;
 
     const firstChild = children[0]; // Assume first child is label
-    const isName = checkChildHasName(firstChild);
+    const bioType = checkLabelForFlaggedText(firstChild);
     
-    if (isName) children.forEach((c, index) => {
+    if (bioType) children.forEach((c, index) => {
         if (index === 0) return;
-        replaceNodeName(c);
+        replaceNodeText(c, bioType);
     });
 }
-function checkChildHasName(node: Node): boolean {
+function checkLabelForFlaggedText(node: Node): BiographicType {
     const children = Array.from(node.childNodes);
     if (children.length > 0) {
-        return children.reduce(
-            (acc, c) => {
-                if (acc) return true;
-                return acc || checkChildHasName(c);
-            },
-            false
-        );
+        for (const c of children) {
+            const bioType = checkLabelForFlaggedText(c);
+            if (bioType) return bioType;
+        }
     }
     
     const value = node.nodeValue;
-    if (value && node.nodeType === Node.TEXT_NODE) return textIncludesFlaggedWord(value);
+    if (value && node.nodeType === Node.TEXT_NODE) return checkForFlaggedText(value);
 
-    return false
+    return BiographicType.None;
 }

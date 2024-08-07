@@ -1,26 +1,45 @@
 enum BiographicType {None, Name, Other};
 
-// WARNING: This function will be adjusted to return BiographicType
-export function textIncludesFlaggedWord(text: string): boolean {
-    const flaggedWords = ["Name", "Student", "Academic Record"];
-    return flaggedWords.reduce(
-        (acc, flaggedWord) => {
-            if (acc) return true;
-            return acc || text.includes(flaggedWord);
-        },
-        false
-    );
+const flaggedNameLabels = ["Name", "Student", "Academic Record"];
+const flaggedOtherLabels = [
+    "Date of Birth",
+    "Age",
+    "Citizenship Status",
+    "Trans Experience",
+    "Gender",
+    "Pronouns",
+    "Address",
+    "Phone Number",
+    "Identification #",
+    "Sex",
+    "Contact Information"
+];
+
+export function checkForFlaggedText(text: string): BiographicType {
+    const isNameLabel = flaggedNameLabels.reduce((a,l) => labelReduceCallback(a,l,text), false);
+    if (isNameLabel) return BiographicType.Name;
+
+    const isOtherLabel = flaggedOtherLabels.reduce((a,l) => labelReduceCallback(a,l,text), false);
+    return isOtherLabel ? BiographicType.Other : BiographicType.None;
 }
-export function replaceNodeName(node: Node) {
+function labelReduceCallback(accumulator: boolean, label: string, text: string) {
+    if (accumulator) return true;
+    return accumulator || text.includes(label);
+}
+export function replaceNodeText(node: Node, bioType: BiographicType) {
     const children = node.childNodes;
     const value = node.nodeValue;
 
     if (children.length === 0 && value && node.nodeType === Node.TEXT_NODE) {
-        node.nodeValue = replaceName(value);
+        if (bioType === BiographicType.Name) {
+            node.nodeValue = replaceName(value);
+        } else {
+            node.nodeValue = replaceTextWithDashes(value);
+        }
         return;
     }
 
-    children.forEach(c => replaceNodeName(c));
+    children.forEach(c => replaceNodeText(c, bioType));
 }
 export function replaceName(text: string): string {
     const beforeStuID = text.split(/\d/)[0];
@@ -28,6 +47,9 @@ export function replaceName(text: string): string {
     const censored = replaceAlphaCharsWithDashes(beforeColon);
     return text.replace(beforeColon, censored);
 }
-export function replaceAlphaCharsWithDashes(source: string): string {
+function replaceTextWithDashes(source: string): string {
+    return source.replace(/.+/, "-----");
+}
+function replaceAlphaCharsWithDashes(source: string): string {
     return source.replace(/[a-zA-Z]+/g, "-----");
 }

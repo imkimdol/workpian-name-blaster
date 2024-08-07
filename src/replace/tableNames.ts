@@ -1,8 +1,8 @@
 enum BiographicType {None, Name, Other};
 
 const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
-const textIncludesFlaggedWord: (text: string) => boolean = helpers.textIncludesFlaggedWord;
-const replaceNodeName: (node: Node) => void = helpers.textIncludesFlaggedWord;
+const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
+const replaceNodeText: (node: Node, bioType: BiographicType) => void = helpers.replaceNodeText;
 
 export default function replaceTableNames() {
     const tables = Array.from(document.getElementsByTagName("table"));
@@ -16,30 +16,30 @@ function scanTable(table: HTMLTableElement) {
     const bodies = Array.from(table.tBodies);
     bodies.forEach(b => scanBody(b, indices));
 }
-function scanHead(head: HTMLTableSectionElement): boolean[] {
-    const isNameColumnArr: boolean[] = [];
+function scanHead(head: HTMLTableSectionElement): BiographicType[] {
+    const isBioInfoColumn: BiographicType[] = [];
     const rows = Array.from(head.rows);
 
-    rows.forEach(r => scanHeadRow(r, isNameColumnArr));
+    rows.forEach(r => scanHeadRow(r, isBioInfoColumn));
 
-    return isNameColumnArr;
+    return isBioInfoColumn;
 }
-function scanHeadRow(row: HTMLTableRowElement, isNameColumnArr: boolean[]) {
+function scanHeadRow(row: HTMLTableRowElement, isBioInfoColumn: BiographicType[]) {
     const cells = Array.from(row.cells);
     cells.forEach(c => {
         const scope = c.getAttribute("scope");
         if (!scope || scope !== "col") return;
 
-        isNameColumnArr.push(textIncludesFlaggedWord(c.innerText));
+        isBioInfoColumn.push(checkForFlaggedText(c.innerText));
     });
 }
-function scanBody(body: HTMLTableSectionElement, isNameColumnArr: boolean[]) {
+function scanBody(body: HTMLTableSectionElement, isBioInfoColumn: BiographicType[]) {
     const rows = Array.from(body.rows);
-    rows.forEach(r => scanBodyRow(r, isNameColumnArr));
+    rows.forEach(r => scanBodyRow(r, isBioInfoColumn));
 }
-function scanBodyRow(row: HTMLTableRowElement, isNameColumnArr: boolean[]) {
+function scanBodyRow(row: HTMLTableRowElement, isBioInfoColumn: BiographicType[]) {
     const cells = Array.from(row.cells);
     cells.forEach((cell, index) => {
-        if (isNameColumnArr[index]) replaceNodeName(cell);
+        if (isBioInfoColumn[index]) replaceNodeText(cell, isBioInfoColumn[index]);
     });
 }
