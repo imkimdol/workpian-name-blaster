@@ -59,10 +59,10 @@ async function run() {
 
         setHTML(elements, isBlastin);
         addEventListeners(elements, isBlastin, activeTabId);
-    } catch {
-        elements.border.classList.add("disabled");
-        elements.blastButton.disabled = true;
-    }
+
+        elements.border.classList.remove("disabled");
+        elements.blastButton.disabled = false;
+    } catch {} // Do nothing
 };
 
 run();
