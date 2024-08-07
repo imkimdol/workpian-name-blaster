@@ -6,9 +6,6 @@
   "action": {
     "default_popup": "popup/popup.html"
   },
-  "permissions": [
-    "webNavigation"
-  ],
   "content_scripts": [
     {
       "matches": ["https://*.myworkday.com/*"],
