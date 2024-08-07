@@ -1,5 +1,4 @@
 let isBlastin = false;
-let currentUrl = location.href;
 
 function replaceNames() {
     replaceNSIDNames(null);
