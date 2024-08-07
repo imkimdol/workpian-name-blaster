@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "WorkPian Name Blaster",
-  "description": "Lorem ipsum",
-  "version": "0.1",
+  "description": "Lorem ipsum dolor sit amet",
+  "version": "0.5",
   "action": {
     "default_popup": "popup.html"
   },
@@ -13,6 +13,10 @@
    {
      "matches": ["https://*.myworkday.com/*"],
      "js": ["workday.js"]
+   },
+   {
+     "matches": ["https://*.appiancloud.com/*"],
+     "js": ["appian.js"]
    }
  ]
 }
