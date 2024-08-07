@@ -25,9 +25,7 @@ function replaceNSIDName(node: Node) {
     if (node.nodeType === Node.TEXT_NODE) {
         const value = node.nodeValue;
         if (value && regex.test(value)) {
-            const beforeStuID = value.split(/\d/)[0];
-            const censored = replaceAlphaCharsWithDashes(beforeStuID);
-            node.nodeValue = value.replace(beforeStuID, censored);
+            node.nodeValue = replaceName(value);
         }
     }
 }
@@ -52,13 +50,16 @@ function checkChildHasName(node: Node): boolean {
     const children = Array.from(node.childNodes);
     if (children.length > 0) {
         return children.reduce(
-            (acc, c) => acc || checkChildHasName(c),
+            (acc, c) => {
+                if (acc) return true;
+                return acc || checkChildHasName(c);
+            },
             false
         );
     }
     
     const value = node.nodeValue;
-    if (value && node.nodeType === Node.TEXT_NODE) return value.includes("Name");
+    if (value && node.nodeType === Node.TEXT_NODE) return textIncludesFlaggedWord(value);
 
     return false
 }
@@ -89,11 +90,8 @@ function scanHeadRow(row: HTMLTableRowElement, isNameColumnArr: boolean[]) {
         const scope = c.getAttribute("scope");
         if (!scope || scope !== "col") return;
 
-        isNameColumnArr.push(checkHeadCellText(c));
+        isNameColumnArr.push(textIncludesFlaggedWord(c.innerText));
     });
-}
-function checkHeadCellText(cell: HTMLTableCellElement) {
-    return cell.innerText.includes("Name") || cell.innerText.includes("Student") || cell.innerText.includes("Academic Record");
 }
 function scanBody(body: HTMLTableSectionElement, isNameColumnArr: boolean[]) {
     const rows = Array.from(body.rows);
@@ -106,15 +104,31 @@ function scanBodyRow(row: HTMLTableRowElement, isNameColumnArr: boolean[]) {
     });
 }
 
+function textIncludesFlaggedWord(text: string): boolean {
+    const flaggedWords = ["Name", "Student", "Academic Record"];
+    return flaggedWords.reduce(
+        (acc, flaggedWord) => {
+            if (acc) return true;
+            return acc || text.includes(flaggedWord);
+        },
+        false
+    );
+}
 function replaceNodeName(node: Node) {
     const children = node.childNodes;
+    const value = node.nodeValue;
 
-    if (children.length === 0 && node.nodeValue && node.nodeType === Node.TEXT_NODE) {
-        node.nodeValue = replaceAlphaCharsWithDashes(node.nodeValue);
+    if (children.length === 0 && value && node.nodeType === Node.TEXT_NODE) {
+        node.nodeValue = replaceName(value);
         return;
     }
 
     children.forEach(c => replaceNodeName(c));
+}
+function replaceName(text: string): string {
+    const beforeStuID = text.split(/\d/)[0];
+    const censored = replaceAlphaCharsWithDashes(beforeStuID);
+    return text.replace(beforeStuID, censored);
 }
 function replaceAlphaCharsWithDashes(source: string): string {
     return source.replace(/[a-zA-Z]+/g, "-----");
