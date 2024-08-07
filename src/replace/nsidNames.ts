@@ -1,5 +1,5 @@
-const helpersUrl = chrome.runtime.getURL("replace/helpers.js");
-const { replaceName } = await import(helpersUrl);
+const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
+const replaceName: (text: string) => string = helpers.replaceName;
 
 // NSID = Names (Student ID)
 export default function replaceNSIDNames(node: Node | null) {

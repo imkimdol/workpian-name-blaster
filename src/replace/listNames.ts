@@ -1,5 +1,8 @@
-const helpersUrl = chrome.runtime.getURL("replace/helpers.js");
-const { textIncludesFlaggedWord, replaceNodeName } = await import(helpersUrl);
+enum BiographicType {None, Name, Other};
+
+const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
+const textIncludesFlaggedWord: (text: string) => boolean = helpers.textIncludesFlaggedWord;
+const replaceNodeName: (node: Node) => void = helpers.textIncludesFlaggedWord;
 
 export default function replaceListNames() {
     const LIs = Array.from(document.getElementsByTagName("li"));

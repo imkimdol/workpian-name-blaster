@@ -1,4 +1,4 @@
-export enum BiographicType {None, Name, Other};
+enum BiographicType {None, Name, Other};
 
 // WARNING: This function will be adjusted to return BiographicType
 export function textIncludesFlaggedWord(text: string): boolean {
