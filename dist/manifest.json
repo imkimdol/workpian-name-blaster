@@ -11,12 +11,23 @@
   ],
   "content_scripts": [
    {
-     "matches": ["https://*.myworkday.com/*"],
-     "js": ["workday.js"]
+      "matches": ["https://*.myworkday.com/*"],
+      "js": ["workday.js"]
    },
    {
      "matches": ["https://*.appiancloud.com/*"],
      "js": ["appian.js"]
    }
- ]
+ ],
+ "web_accessible_resources": [
+    {
+     "matches": ["https://*.myworkday.com/*"],
+     "resources": [
+        "replace/helpers.js",
+        "replace/listNames.js",
+        "replace/nsidNames.js",
+        "replace/tableNames.js"
+      ]
+    }
+  ]
 }
