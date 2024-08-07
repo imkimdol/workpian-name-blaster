@@ -4,25 +4,25 @@
   "description": "Lorem ipsum dolor sit amet",
   "version": "0.5",
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup/popup.html"
   },
   "permissions": [
     "webNavigation"
   ],
   "content_scripts": [
-   {
+    {
       "matches": ["https://*.myworkday.com/*"],
       "js": ["workday.js"]
-   },
-   {
-     "matches": ["https://*.appiancloud.com/*"],
-     "js": ["appian.js"]
-   }
- ],
+    },
+    {
+      "matches": ["https://*.appiancloud.com/*"],
+      "js": ["appian.js"]
+    }
+  ],
  "web_accessible_resources": [
     {
-     "matches": ["https://*.myworkday.com/*"],
-     "resources": [
+      "matches": ["https://*.myworkday.com/*"],
+      "resources": [
         "replace/helpers.js",
         "replace/listNames.js",
         "replace/nsidNames.js",
