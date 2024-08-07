@@ -2,7 +2,7 @@ const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
 const replaceName: (text: string) => string = helpers.replaceName;
 
 // NSID = Names (Student ID)
-export default function replaceNSIDNames(node: Node | null) {
+export default function replaceNSIDNames(node: Node | null = null) {
     if (!node) node = document.body;
 
     const children = node.childNodes;

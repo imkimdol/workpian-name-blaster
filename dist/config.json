@@ -1,0 +1,27 @@
+{
+  "enableTableReplacement": true,
+  "enableListReplacement": true,
+  "enableNSIDReplacement": true,
+
+  "flaggedNameLabels": [
+    "Name",
+    "Student",
+    "Academic Record"
+  ],
+  "flaggedOtherLabels": [
+    "Date of Birth",
+    "Age",
+    "Citizenship Status",
+    "Trans Experience",
+    "Gender",
+    "Pronouns",
+    "Address",
+    "Phone Number",
+    "Identification #",
+    "Sex",
+    "Contact Information"
+  ],
+
+  "NSIDReplaceBeforeNumeric": true,
+  "NSIDReplaceBeforeColon": true
+}

@@ -20,6 +20,8 @@
     {
       "matches": ["https://*.myworkday.com/*"],
       "resources": [
+        "config.json",
+        "configParser.js",
         "replace/helpers.js",
         "replace/listNames.js",
         "replace/nsidNames.js",

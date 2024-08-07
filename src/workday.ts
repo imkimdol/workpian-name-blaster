@@ -1,24 +1,32 @@
-let isBlastin = false;
-let replaceListNames: () => void;
-let replaceTableNames: () => void;
-let replaceNSIDNames: (node: Node | null) => void;
+let config;
+let replaceFunctions: VoidFunction[] = [];
 
-// https://stackoverflow.com/questions/48104433/how-to-import-es6-modules-in-content-script-for-chrome-extension
+let isBlastin = false;
+
 async function importFiles() {
-    const listNamesUrl = chrome.runtime.getURL("replace/listNames.js");
-    const tableNamesUrl = chrome.runtime.getURL("replace/tableNames.js");
-    const nsidNamesUrl = chrome.runtime.getURL("replace/nsidNames.js");
-    replaceListNames = (await import(listNamesUrl)).default;
-    replaceTableNames = (await import(tableNamesUrl)).default;
-    replaceNSIDNames = (await import(nsidNamesUrl)).default;
+    const configParser = await import(chrome.runtime.getURL("configParser.js"));
+    config = configParser.config;
+
+    if (config.enableListReplacement) {
+        const listNamesUrl = chrome.runtime.getURL("replace/listNames.js");
+        const replaceListNames = (await import(listNamesUrl)).default;
+        if (replaceListNames) replaceFunctions.push(replaceListNames);
+    }
+    if (config.enableTableReplacement) {
+        const tableNamesUrl = chrome.runtime.getURL("replace/tableNames.js");
+        const replaceTableNames = (await import(tableNamesUrl)).default;
+        if (replaceTableNames) replaceFunctions.push(replaceTableNames);
+    }
+    if (config.enableNSIDReplacement) {
+        const nsidNamesUrl = chrome.runtime.getURL("replace/nsidNames.js");
+        const replaceNSIDNames = (await import(nsidNamesUrl)).default;
+        if (replaceNSIDNames) replaceFunctions.push(replaceNSIDNames);
+    }
 }
 
 async function replaceNames() {
-    if (!replaceListNames || !replaceTableNames || !replaceNSIDNames) await importFiles();
-    
-    replaceListNames();
-    replaceTableNames();
-    replaceNSIDNames(null);
+    if (replaceFunctions.length === 0) await importFiles();
+    replaceFunctions.forEach(f => f());
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
