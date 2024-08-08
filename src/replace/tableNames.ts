@@ -18,21 +18,43 @@ function scanTable(table: HTMLTableElement) {
 }
 function scanHead(head: HTMLTableSectionElement): BiographicType[] {
     const isBioInfoColumn: BiographicType[] = [];
+    const groupColumnPointers: number[] = [];
     const rows = Array.from(head.rows);
 
-    rows.forEach(r => scanHeadRow(r, isBioInfoColumn));
+    rows.forEach(r => {
+        const cells = Array.from(r.cells);
+        cells.forEach(c => scanHeadRowCell(c, isBioInfoColumn, groupColumnPointers))
+    });
 
+    populateGroupColumnInfo(isBioInfoColumn, groupColumnPointers);
+    
     return isBioInfoColumn;
 }
-function scanHeadRow(row: HTMLTableRowElement, isBioInfoColumn: BiographicType[]) {
-    const cells = Array.from(row.cells);
-    cells.forEach(c => {
-        const scope = c.getAttribute("scope");
-        if (!scope || scope !== "col") return;
+function scanHeadRowCell(cell: HTMLTableCellElement, isBioInfoColumn: BiographicType[], groupColumnPointers: number[]) {
+    const scope = cell.getAttribute("scope");
+        if (!scope) return;
 
-        isBioInfoColumn.push(checkForFlaggedText(c.innerText));
-    });
+        if (scope !== "col") {
+            const spanString = cell.getAttribute("colSpan");
+            if (!spanString) return;
+            const span = parseInt(spanString);
+
+            for (let i=0; i<span; i++) {
+                isBioInfoColumn.push(0);
+                groupColumnPointers.push(isBioInfoColumn.length-1);
+            }
+            return;
+        }
+
+        isBioInfoColumn.push(checkForFlaggedText(cell.innerText));
 }
+function populateGroupColumnInfo(isBioInfoColumn: BiographicType[], groupColumnPointers: number[]) {
+    for (let i = groupColumnPointers.length-1; i>=0; i--) {
+        const pointer = groupColumnPointers[i];
+        isBioInfoColumn[pointer] = isBioInfoColumn[isBioInfoColumn.length-i-1]
+    }
+}
+
 function scanBody(body: HTMLTableSectionElement, isBioInfoColumn: BiographicType[]) {
     const rows = Array.from(body.rows);
     rows.forEach(r => scanBodyRow(r, isBioInfoColumn));
