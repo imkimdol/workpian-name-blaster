@@ -6,15 +6,16 @@ const configParser = await import(chrome.runtime.getURL("configParser.js"));
 const config: Config = configParser.config;
 
 export function checkForFlaggedText(text: string): BiographicType {
-    const isNameLabel = config.flaggedNameLabels.reduce((a,l) => labelReduceCallback(a,l,text), false);
+    const isNameLabel = config.flaggedNameLabels.reduce((a,r) => labelReduceCallback(a,r,text), false);
     if (isNameLabel) return BiographicType.Name;
 
-    const isOtherLabel = config.flaggedOtherLabels.reduce((a,l) => labelReduceCallback(a,l,text), false);
+    const isOtherLabel = config.flaggedOtherLabels.reduce((a,r) => labelReduceCallback(a,r,text), false);
     return isOtherLabel ? BiographicType.Other : BiographicType.None;
 }
-function labelReduceCallback(accumulator: boolean, label: string, text: string) {
+function labelReduceCallback(accumulator: boolean, regexString: string, text: string) {
     if (accumulator) return true;
-    return accumulator || text.includes(label);
+    const regex = RegExp(regexString, "g");
+    return regex.test(text);
 }
 export function replaceNodeText(node: Node, bioType: BiographicType) {
     const children = node.childNodes;
