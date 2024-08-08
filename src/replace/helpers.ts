@@ -34,8 +34,17 @@ export function replaceNodeText(node: Node, bioType: BiographicType) {
 export function replaceName(text: string): string {
     let beforeText = text;
     
-    if (config.NSIDReplaceBeforeNumeric) beforeText = beforeText.split(/\d/)[0];
-    if (config.NSIDReplaceBeforeColon) beforeText = beforeText.split(":")[0];
+    if (config.NSIDExcludeNumeric) {
+        const split = beforeText.split(/\d/);
+        if (config.NSIDSplitBeforeNumeric) beforeText = split[0];
+        else if (beforeText.length > 1) beforeText = split[split.length - 1];
+    }
+
+    if (config.NSIDExcludeColon) {
+        const split = beforeText.split(":");
+        if (config.NSIDSplitBeforeColon) beforeText = split[0];       
+        else if (beforeText.length > 1) beforeText = split[split.length - 1];
+    }
 
     const censored = replaceAlphaCharsWithDashes(beforeText);
     return text.replace(beforeText, censored);

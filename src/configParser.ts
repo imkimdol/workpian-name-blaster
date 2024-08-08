@@ -6,8 +6,10 @@ export type Config = {
     flaggedNameLabels: string[],
     flaggedOtherLabels: string[],
 
-    NSIDReplaceBeforeNumeric: boolean,
-    NSIDReplaceBeforeColon: boolean
+    NSIDExcludeNumeric: boolean,
+    NSIDSplitBeforeNumeric: boolean,
+    NSIDExcludeColon: boolean,
+    NSIDSplitBeforeColon: boolean
 }
 
 async function fetchConfigFile(): Promise<any> {

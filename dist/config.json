@@ -22,6 +22,8 @@
     "Contact Information"
   ],
 
-  "NSIDReplaceBeforeNumeric": true,
-  "NSIDReplaceBeforeColon": true
+  "NSIDExcludeNumeric": true,
+  "NSIDSplitBeforeNumeric": true,
+  "NSIDExcludeColon": true,
+  "NSIDSplitBeforeColon": true
 }
