@@ -23,10 +23,10 @@ class Appian {
             const replaceTableNames = (await import(tableNamesUrl)).default;
             if (replaceTableNames) this.replaceFunctions.push(replaceTableNames);
         }
-        if (this.config.enableNSIDReplacement) {
-            const nsidNamesUrl = chrome.runtime.getURL("replace/nsidNames.js");
-            const replaceNSIDNames = (await import(nsidNamesUrl)).default;
-            if (replaceNSIDNames) this.replaceFunctions.push(replaceNSIDNames);
+        if (this.config.enableSIDNReplacement) {
+            const sidnNamesUrl = chrome.runtime.getURL("replace/nsidNames.js");
+            const replaceSIDNNames = (await import(sidnNamesUrl)).default;
+            if (replaceSIDNNames) this.replaceFunctions.push(replaceSIDNNames);
         }
     }
     

@@ -22,6 +22,8 @@
     "Postal Code",
     "Phone Number",
     "Identification #",
+    "SIN",
+    "Social Insurance Number",
     "Sex",
     "Contact Information"
   ],
