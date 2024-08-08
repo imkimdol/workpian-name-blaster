@@ -6,7 +6,7 @@
   "flaggedNameLabels": [
     "Name",
     "^Student$",
-    "Academic Record"
+    "^Academic Record$"
   ],
   "flaggedOtherLabels": [
     "Date of Birth",
