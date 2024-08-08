@@ -17,7 +17,7 @@
     "Pronouns",
     "Address",
     "City",
-    "^State$",
+    "State",
     "Country",
     "Postal Code",
     "Phone Number",
