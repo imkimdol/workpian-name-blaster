@@ -32,21 +32,35 @@ function scanHead(head: HTMLTableSectionElement): BiographicType[] {
 }
 function scanHeadRowCell(cell: HTMLTableCellElement, isBioInfoColumn: BiographicType[], groupColumnPointers: number[]) {
     const scope = cell.getAttribute("scope");
-        if (!scope) return;
-
-        if (scope !== "col") {
-            const spanString = cell.getAttribute("colSpan");
-            if (!spanString) return;
-            const span = parseInt(spanString);
-
-            for (let i=0; i<span; i++) {
-                isBioInfoColumn.push(0);
-                groupColumnPointers.push(isBioInfoColumn.length-1);
-            }
-            return;
+    if (!scope) {
+        const className = cell.className;
+        if (className === "PagingGridLayout---checkbox") {
+            console.log(className);
+            isBioInfoColumn.push(checkForFlaggedText(cell.innerText));
         }
+        return;
+    };
 
-        isBioInfoColumn.push(checkForFlaggedText(cell.innerText));
+    if (scope !== "col") {
+        /*
+            ──────▄▀▄─────▄▀▄
+            ─────▄█░░▀▀▀▀▀░░█▄
+            ─▄▄──█░░░░░░░░░░░█──▄▄
+            █▄▄█─█░░▀░░┬░░▀░░█─█▄▄█
+        */
+        
+        const spanString = cell.getAttribute("colSpan");
+        if (!spanString) return;
+        const span = parseInt(spanString);
+
+        for (let i=0; i<span; i++) {
+            isBioInfoColumn.push(0);
+            groupColumnPointers.push(isBioInfoColumn.length-1);
+        }
+        return;
+    }
+
+    isBioInfoColumn.push(checkForFlaggedText(cell.innerText));
 }
 function populateGroupColumnInfo(isBioInfoColumn: BiographicType[], groupColumnPointers: number[]) {
     for (let i=0; i<groupColumnPointers.length; i++) {
