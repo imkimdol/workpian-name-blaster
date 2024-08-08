@@ -49,9 +49,10 @@ function scanHeadRowCell(cell: HTMLTableCellElement, isBioInfoColumn: Biographic
         isBioInfoColumn.push(checkForFlaggedText(cell.innerText));
 }
 function populateGroupColumnInfo(isBioInfoColumn: BiographicType[], groupColumnPointers: number[]) {
-    for (let i = groupColumnPointers.length-1; i>=0; i--) {
+    for (let i=0; i<groupColumnPointers.length; i++) {
         const pointer = groupColumnPointers[i];
-        isBioInfoColumn[pointer] = isBioInfoColumn[isBioInfoColumn.length-i-1]
+        const sourceIndex = isBioInfoColumn.length - groupColumnPointers.length + i;
+        isBioInfoColumn[pointer] = isBioInfoColumn[sourceIndex];
     }
 }
 
