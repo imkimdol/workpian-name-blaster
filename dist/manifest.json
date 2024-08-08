@@ -27,6 +27,17 @@
         "replace/nsidNames.js",
         "replace/tableNames.js"
       ]
+    },
+    {
+      "matches": ["https://*.appiancloud.com/*"],
+      "resources": [
+        "config.json",
+        "configParser.js",
+        "replace/helpers.js",
+        "replace/listNames.js",
+        "replace/nsidNames.js",
+        "replace/tableNames.js"
+      ]
     }
   ]
 }
