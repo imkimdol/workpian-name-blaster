@@ -28,8 +28,8 @@
     "Contact Information"
   ],
 
-  "NSIDExcludeNumeric": true,
-  "NSIDSplitBeforeNumeric": true,
-  "NSIDExcludeColon": true,
-  "NSIDSplitBeforeColon": true
+  "ScanUsingNumericPivot": true,
+  "SplitBeforeNumericPivot": true,
+  "ScanUsingColonPivot": true,
+  "SplitBeforeColonPivot": true
 }

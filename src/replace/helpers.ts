@@ -35,15 +35,15 @@ export function replaceNodeText(node: Node, bioType: BiographicType) {
 export function replaceName(text: string): string {
     let beforeText = text;
     
-    if (config.NSIDExcludeNumeric) {
+    if (config.ScanUsingNumericPivot) {
         const split = beforeText.split(/\d/);
-        if (config.NSIDSplitBeforeNumeric) beforeText = split[0];
+        if (config.SplitBeforeNumericPivot) beforeText = split[0];
         else if (beforeText.length > 1) beforeText = split[split.length - 1];
     }
 
-    if (config.NSIDExcludeColon) {
+    if (config.ScanUsingColonPivot) {
         const split = beforeText.split(":");
-        if (config.NSIDSplitBeforeColon) beforeText = split[0];       
+        if (config.SplitBeforeColonPivot) beforeText = split[0];       
         else if (beforeText.length > 1) beforeText = split[split.length - 1];
     }
 

@@ -6,10 +6,10 @@ export type Config = {
     flaggedNameLabels: string[],
     flaggedOtherLabels: string[],
 
-    NSIDExcludeNumeric: boolean,
-    NSIDSplitBeforeNumeric: boolean,
-    NSIDExcludeColon: boolean,
-    NSIDSplitBeforeColon: boolean
+    ScanUsingNumericPivot: boolean,
+    SplitBeforeNumericPivot: boolean,
+    ScanUsingColonPivot: boolean,
+    SplitBeforeColonPivot: boolean
 }
 
 async function fetchConfigFile(): Promise<any> {
