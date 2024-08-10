@@ -4,10 +4,19 @@ const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
 const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
 const replaceNodeText: (node: Node, bioType: BiographicType) => void = helpers.replaceNodeText;
 
+/**
+ * Replaces WD elements manifesting as a list item with one div for the label and the other for the data to anonymize.
+ */
 export default function replaceListNames() {
     const LIs = Array.from(document.getElementsByTagName("li"));
     LIs.forEach(l => scanLI(l));
 }
+
+/**
+ * Scans each list item to see if it matches a WD label/data pairing with sensitive data.
+ * @param element - the current HTML element
+ * @returns automatically returns if the list item has less than 2 elements or does not have a label under the config file.
+ */
 function scanLI(element: HTMLElement) {
     const children = element.childNodes;
     if (children.length < 2) return;
@@ -20,7 +29,14 @@ function scanLI(element: HTMLElement) {
         replaceNodeText(c, bioType);
     });
 }
+
+/**
+ * Recursive function that verifies for each (assumed) WD label node, that it is a label present in the config.json file.
+ * @param node - the current HTML node (assume that it is a label)
+ * @returns `bioType` - true if a match for the label was found in the config.json, false otherwise
+ */
 function checkLabelForFlaggedText(node: Node): BiographicType {
+    // checks the children of the LABEL's div class. One of them will be the label displayed, but we aren't always sure which one
     const children = Array.from(node.childNodes);
     if (children.length > 0) {
         for (const c of children) {

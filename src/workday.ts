@@ -4,11 +4,15 @@ class Workday {
     
     private isBlastin = false;
     
+
     constructor() {
         this.addListener()
         this.setReplacementLoop()
     }
 
+    /**
+     * Imports parser for config file and required modules.
+     */
     private async importFiles() {
         const configParser = await import(chrome.runtime.getURL("configParser.js"));
         this.config = configParser.config;
@@ -30,11 +34,17 @@ class Workday {
         }
     }
     
+    /**
+     * Runs selected modules to begin anonymizing.
+     */
     private async replaceNames() {
         if (this.replaceFunctions.length === 0) await this.importFiles();
         this.replaceFunctions.forEach(f => f());
     }
     
+    /**
+     * Listener function for extension/page interactions.
+     */
     private addListener() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (message.action === 'startBlastin') {
@@ -50,6 +60,9 @@ class Workday {
         });
     }
 
+    /**
+     * Checks every constant amount whether to begin anonymizing.
+     */
     private setReplacementLoop() {
         setInterval(() => {if (this.isBlastin) this.replaceNames();}, 2000);
     }
