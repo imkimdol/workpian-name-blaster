@@ -34,8 +34,8 @@
         "config.json",
         "configParser.js",
         "replace/helpers.js",
-        "replace/listNames.js",
-        "replace/nsidNames.js",
+        "replace/listNamesAppian.js",
+        "replace/sidnNames.js",
         "replace/tableNames.js"
       ]
     }

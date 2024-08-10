@@ -9,12 +9,15 @@ class Appian {
         this.setReplacementLoop()
     }
 
+    /**
+     * Imports parser for config file and required modules.
+     */
     private async importFiles() {
         const configParser = await import(chrome.runtime.getURL("configParser.js"));
         this.config = configParser.config;
     
         if (this.config.enableListReplacement) {
-            const listNamesUrl = chrome.runtime.getURL("replace/listNames.js");
+            const listNamesUrl = chrome.runtime.getURL("replace/listNamesAppian.js");
             const replaceListNames = (await import(listNamesUrl)).default;
             if (replaceListNames) this.replaceFunctions.push(replaceListNames);
         }
@@ -23,18 +26,24 @@ class Appian {
             const replaceTableNames = (await import(tableNamesUrl)).default;
             if (replaceTableNames) this.replaceFunctions.push(replaceTableNames);
         }
-        if (this.config.enableSIDNReplacement) {
-            const sidnNamesUrl = chrome.runtime.getURL("replace/nsidNames.js");
+        if (this.config.enableNSIDReplacement) { // leave this unchanged! until we update flags
+            const sidnNamesUrl = chrome.runtime.getURL("replace/sidnNames.js");
             const replaceSIDNNames = (await import(sidnNamesUrl)).default;
             if (replaceSIDNNames) this.replaceFunctions.push(replaceSIDNNames);
         }
     }
     
+    /**
+     * Runs selected modules to begin anonymizing.
+     */
     private async replaceNames() {
         if (this.replaceFunctions.length === 0) await this.importFiles();
         this.replaceFunctions.forEach(f => f());
     }
     
+    /**
+     * Listener function for extension/page interactions.
+     */
     private addListener() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (message.action === 'startBlastin') {
@@ -50,6 +59,9 @@ class Appian {
         });
     }
 
+    /**
+     * Function to anonymize every defined amount of time (2 seconds).
+     */
     private setReplacementLoop() {
         setInterval(() => {if (this.isBlastin) this.replaceNames();}, 2000);
     }

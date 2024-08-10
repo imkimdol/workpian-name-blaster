@@ -61,7 +61,7 @@ class Workday {
     }
 
     /**
-     * Checks every constant amount whether to begin anonymizing.
+     * Function to anonymize every defined amount of time (2 seconds).
      */
     private setReplacementLoop() {
         setInterval(() => {if (this.isBlastin) this.replaceNames();}, 2000);
