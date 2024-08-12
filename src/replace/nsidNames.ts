@@ -15,7 +15,7 @@ export default function replaceNSIDNames(node: Node | null = null) {
     children.forEach(c => replaceNSIDNames(c));
 }
 function replaceNSIDName(node: Node) {
-    const regex = /^(\S+\s+)+\(\d{8}\).*$/;
+    const regex = /^([\S\-]+\s+)+\(\d{8}\).*$/;
     if (node.nodeType === Node.TEXT_NODE) {
         const value = node.nodeValue;
         if (value && regex.test(value)) {

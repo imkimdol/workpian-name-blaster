@@ -54,5 +54,5 @@ function replaceTextWithDashes(source: string): string {
     return source.replace(/.+/, "-----");
 }
 function replaceAlphaCharsWithDashes(source: string): string {
-    return source.replace(/[a-zA-Z]+/g, "-----");
+    return source.replace(/[a-zA-Z\-]+/g, "-----");
 }
