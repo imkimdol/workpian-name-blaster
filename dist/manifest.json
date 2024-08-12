@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "WorkPian Name Blaster",
   "description": "Lorem ipsum dolor sit amet",
-  "version": "0.5",
+  "version": "0.9",
   "action": {
     "default_popup": "popup/popup.html"
   },

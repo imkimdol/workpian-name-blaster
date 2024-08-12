@@ -4,7 +4,7 @@
   "enableNSIDReplacement": true,
 
   "flaggedNameLabels": [
-    "Name",
+    "^(?!.*(Award|Cohort).*Name).*Name.*",
     "^Student$",
     "^Academic Record$"
   ],
@@ -29,7 +29,7 @@
   ],
 
   "ScanUsingNumericPivot": true,
-  "SplitBeforeNumericPivot": true,
+  "SplitBeforeNumericPivot": false,
   "ScanUsingColonPivot": true,
   "SplitBeforeColonPivot": true
 }
