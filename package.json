@@ -1,6 +1,5 @@
 {
   "name": "workpian-name-blaster",
-  "version": "0.1.0",
   "repository": "https://github.com/imkimdol/workpian-name-blaster.git",
   "dependencies": {
     "@tsconfig/node18": "^18.2.4",
