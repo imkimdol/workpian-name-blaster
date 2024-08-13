@@ -4,7 +4,7 @@
   "enableNSIDReplacement": true,
 
   "flaggedNameLabels": [
-    "Name",
+    "^(?!.*(Award|Cohort).*Name).*Name.*",
     "^Student$",
     "^Academic Record$"
   ],
@@ -22,12 +22,14 @@
     "Postal Code",
     "Phone Number",
     "Identification #",
+    "SIN",
+    "Social Insurance Number",
     "Sex",
     "Contact Information"
   ],
 
-  "NSIDExcludeNumeric": true,
-  "NSIDSplitBeforeNumeric": true,
-  "NSIDExcludeColon": true,
-  "NSIDSplitBeforeColon": true
+  "ScanUsingNumericPivot": true,
+  "SplitBeforeNumericPivot": false,
+  "ScanUsingColonPivot": true,
+  "SplitBeforeColonPivot": true
 }

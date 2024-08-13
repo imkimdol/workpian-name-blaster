@@ -8,8 +8,8 @@ const replaceNodeText: (node: Node, bioType: BiographicType) => void = helpers.r
  * Replaces WD elements manifesting as a list item with one div for the label and the other for the data to anonymize.
  */
 export default function replaceListNames() {
-    const LIs = Array.from(document.getElementsByTagName("li"));
-    LIs.forEach(l => scanLI(l));
+    const Elements = Array.from(document.getElementsByClassName("SideBySideGroup---side_by_side"));
+    Elements.forEach(l => scanLI(l));
 }
 
 /**
@@ -17,7 +17,7 @@ export default function replaceListNames() {
  * @param element - the current HTML element
  * @returns automatically returns if the list item has less than 2 elements or does not have a label under the config file.
  */
-function scanLI(element: HTMLElement) {
+function scanLI(element: Element) {
     const children = element.childNodes;
     if (children.length < 2) return;
 

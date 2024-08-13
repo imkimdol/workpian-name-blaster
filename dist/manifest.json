@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "WorkPian Name Blaster",
+  "version": "0.9",
   "description": "Censors biographical data in Workday and Appian LFSM.",
-  "version": "0.5",
   "action": {
     "default_popup": "popup/popup.html"
   },
@@ -31,6 +31,17 @@
         "replace/helpers.js",
         "replace/listNames.js",
         "replace/nsidNames.js",
+        "replace/tableNames.js"
+      ]
+    },
+    {
+      "matches": ["https://*.appiancloud.com/*"],
+      "resources": [
+        "config.json",
+        "configParser.js",
+        "replace/helpers.js",
+        "replace/listNamesAppian.js",
+        "replace/sidnNames.js",
         "replace/tableNames.js"
       ]
     }
