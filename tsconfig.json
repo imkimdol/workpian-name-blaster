@@ -8,6 +8,6 @@
 		"outDir": "dist",
 		"allowJs": true,
 		"noImplicitAny": true,
-		"removeComments": true,
+		"removeComments": false,
 	}
 }
