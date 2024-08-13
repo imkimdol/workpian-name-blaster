@@ -1,15 +1,30 @@
 import type { BiographicType } from './helpers';
+import type { Config } from "../configParser";
 
 const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
 const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
 const replaceNodeText: (node: Node, bioType: BiographicType) => void = helpers.replaceNodeText;
 
+const configParser = await import(chrome.runtime.getURL("configParser.js"));
+const config: Config = configParser.config;
+
 /**
  * Replaces WD elements manifesting as a list item with one div for the label and the other for the data to anonymize.
  */
 export default function replaceListNames() {
+    if (config.currentPage === "appian") {
+        replaceListNamesAppian();
+    } else {
+        replaceListNamesWorkday()
+    }
+}
+function replaceListNamesWorkday() {
     const LIs = Array.from(document.getElementsByTagName("li"));
     LIs.forEach(l => scanLI(l));
+}
+function replaceListNamesAppian() {
+    const Elements = Array.from(document.getElementsByClassName("SideBySideGroup---side_by_side"));
+    Elements.forEach(l => scanLI(l));
 }
 
 /**
@@ -17,7 +32,7 @@ export default function replaceListNames() {
  * @param element - the current HTML element
  * @returns automatically returns if the list item has less than 2 elements or does not have a label under the config file.
  */
-function scanLI(element: HTMLElement) {
+function scanLI(element: Element) {
     const children = element.childNodes;
     if (children.length < 2) return;
 
