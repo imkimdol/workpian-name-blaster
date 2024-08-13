@@ -101,5 +101,5 @@ function replaceTextWithDashes(source: string): string {
  * @returns (string) the new string with dashes
  */
 function replaceAlphaCharsWithDashes(source: string): string {
-    return source.replace(/[a-zA-Z]+/g, "-----");
+    return source.replace(/[a-zA-Z\-]+/g, "-----");
 }
