@@ -14,33 +14,19 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*.myworkday.com/ubc*"],
-      "js": ["workday.js"]
-    },
-    {
-      "matches": ["https://*.appiancloud.com/*"],
-      "js": ["appian.js"]
+      "matches": ["https://*.myworkday.com/ubc*", "https://*.appiancloud.com/*"],
+      "js": ["contentScript.js"]
     }
   ],
- "web_accessible_resources": [
+  "web_accessible_resources": [
     {
-      "matches": ["https://*.myworkday.com/*"],
+      "matches": ["https://*.myworkday.com/*", "https://*.appiancloud.com/*"],
       "resources": [
         "config.json",
         "configParser.js",
+        "setupPage.js",
         "replace/helpers.js",
         "replace/listNames.js",
-        "replace/simpleTemplateNames.js",
-        "replace/tableNames.js"
-      ]
-    },
-    {
-      "matches": ["https://*.appiancloud.com/*"],
-      "resources": [
-        "config.json",
-        "configParser.js",
-        "replace/helpers.js",
-        "replace/listNamesAppian.js",
         "replace/simpleTemplateNames.js",
         "replace/tableNames.js"
       ]

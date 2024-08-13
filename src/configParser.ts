@@ -1,8 +1,7 @@
 export type Config = {
     enableTableReplacement: boolean,
     enableListReplacement: boolean,
-    enableNSIDReplacement: boolean,
-    enableSIDNReplacement: boolean,
+    enableSimpleTemplateNameReplacement: boolean,
     currentPage: string,
 
     flaggedNameLabels: string[],

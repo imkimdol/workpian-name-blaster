@@ -1,10 +1,8 @@
 {
   "enableTableReplacement": true,
   "enableListReplacement": true,
-  "enableNSIDReplacement": true,
-  "enableSIDNReplacement": true,
+  "enableSimpleTemplateNameReplacement": true,
   "currentPage": "workday",
-
 
   "flaggedNameLabels": [
     "^(?!.*(Award|Cohort).*Name).*Name.*",
