@@ -29,7 +29,7 @@ class Workday {
             if (replaceTableNames) this.replaceFunctions.push(replaceTableNames);
         }
         if (this.config.enableNSIDReplacement) {
-            const nsidNamesUrl = chrome.runtime.getURL("replace/nsidNames.js");
+            const nsidNamesUrl = chrome.runtime.getURL("replace/simpleTemplateNames.js");
             const replaceNSIDNames = (await import(nsidNamesUrl)).default;
             if (replaceNSIDNames) this.replaceFunctions.push(replaceNSIDNames);
         }

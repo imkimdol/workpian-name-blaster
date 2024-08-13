@@ -28,7 +28,7 @@ class Appian {
             if (replaceTableNames) this.replaceFunctions.push(replaceTableNames);
         }
         if (this.config.enableNSIDReplacement) { // leave this unchanged! until we update flags
-            const sidnNamesUrl = chrome.runtime.getURL("replace/sidnNames.js");
+            const sidnNamesUrl = chrome.runtime.getURL("replace/simpleTemplateNames.js");
             const replaceSIDNNames = (await import(sidnNamesUrl)).default;
             if (replaceSIDNNames) this.replaceFunctions.push(replaceSIDNNames);
         }

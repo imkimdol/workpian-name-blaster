@@ -30,7 +30,7 @@
         "configParser.js",
         "replace/helpers.js",
         "replace/listNames.js",
-        "replace/nsidNames.js",
+        "replace/simpleTemplateNames.js",
         "replace/tableNames.js"
       ]
     },
@@ -41,7 +41,7 @@
         "configParser.js",
         "replace/helpers.js",
         "replace/listNamesAppian.js",
-        "replace/sidnNames.js",
+        "replace/simpleTemplateNames.js",
         "replace/tableNames.js"
       ]
     }
