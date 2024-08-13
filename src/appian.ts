@@ -15,6 +15,7 @@ class Appian {
     private async importFiles() {
         const configParser = await import(chrome.runtime.getURL("configParser.js"));
         this.config = configParser.config;
+        console.log(this.config.currentPage);
     
         if (this.config.enableListReplacement) {
             const listNamesUrl = chrome.runtime.getURL("replace/listNamesAppian.js");

@@ -2,6 +2,8 @@ export type Config = {
     enableTableReplacement: boolean,
     enableListReplacement: boolean,
     enableNSIDReplacement: boolean,
+    enableSIDNReplacement: boolean,
+    currentPage: string,
 
     flaggedNameLabels: string[],
     flaggedOtherLabels: string[],
@@ -18,7 +20,16 @@ async function fetchConfigFile(): Promise<any> {
     if (!response.ok) throw new Error(response.statusText);
 
     const config = await response.json();
+    config.currentPage = addCurrentPage(config);
     return config;
 }
 
+function addCurrentPage(config: Config): string {
+    const currentHost = window.location.host;
+    if (currentHost.includes("appian")) {
+        return "appian";
+    } else {
+        return "workday";
+    }
+}
 export const config = await fetchConfigFile() as Config;

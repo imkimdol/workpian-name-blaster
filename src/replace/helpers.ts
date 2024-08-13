@@ -70,6 +70,13 @@ export function replaceNodeText(node: Node, bioType: BiographicType) {
 export function replaceName(text: string): string {
     let beforeText = text;
     
+    if (config.currentPage === "appian") {
+        if (config.ScanUsingNumericPivot) {
+            const split = beforeText.split(/\d/);
+            if (!config.SplitBeforeNumericPivot) beforeText = split[0];
+            else if (beforeText.length > 1) beforeText = split[split.length - 1];
+        }
+    }
     if (config.ScanUsingNumericPivot) {
         const split = beforeText.split(/\d/);
         if (config.SplitBeforeNumericPivot) beforeText = split[0];
