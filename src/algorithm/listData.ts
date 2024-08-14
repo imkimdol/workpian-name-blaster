@@ -16,7 +16,7 @@ class ListDataAlgorithm implements Algorithm {
      */
     censorData(): void {
         if (this.extensionInfo.platform === "Appian") {
-            this.replaceListDataaaAppian();
+            this.replaceListDataAppian();
         } else {
             this.replaceListDataWorkday()
         }
@@ -25,7 +25,7 @@ class ListDataAlgorithm implements Algorithm {
         const LIs = Array.from(document.getElementsByTagName("li"));
         LIs.forEach(l => this.scanLI(l));
     }
-    private replaceListDataaaAppian() {
+    private replaceListDataAppian() {
         const Elements = Array.from(document.getElementsByClassName("SideBySideGroup---side_by_side"));
         Elements.forEach(l => this.scanLI(l));
     }
