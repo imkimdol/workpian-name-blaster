@@ -3,13 +3,13 @@ import type { ExtensionInfo, Algorithm } from "./extensionInfo";
 class SetupHelper {
     private readonly loopInterval = 2000;
 
-    private algorithms: Algorithm[];
+    private extensionInfo: ExtensionInfo
     private replaceFunctions: VoidFunction[] = [];
     
     private isBlastin = false;
     
-    constructor(algorithms: Algorithm[]) {
-        this.algorithms = algorithms;
+    constructor(extensionInfo: ExtensionInfo) {
+        this.extensionInfo = extensionInfo;
 
         this.addListener();
         this.setReplacementLoop();
@@ -19,8 +19,8 @@ class SetupHelper {
      * Imports parser for config file and required modules.
      */
     private async importModules() {        
-        for (const a of this.algorithms) {
-            const url = chrome.runtime.getURL(a.filePath);
+        for (const p of this.extensionInfo.algorithmPaths) {
+            const url = chrome.runtime.getURL(p);
             const importedFunction = (await import(url)).default;
             if (importedFunction) this.replaceFunctions.push(importedFunction);
         }
@@ -63,5 +63,5 @@ class SetupHelper {
 export default async function setupPage() {
     const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
     const extensionInfo = infoModule.info as ExtensionInfo;
-    new SetupHelper(extensionInfo.algorithms);
+    new SetupHelper(extensionInfo);
 };

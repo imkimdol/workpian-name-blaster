@@ -5,7 +5,7 @@ export type Platform = "Workday" | "Appian";
 
 export abstract class ExtensionInfo {
     platform: Platform;
-    algorithms: Algorithm[];
+    algorithmPaths: string[];
 
     flaggedNameLabels: RegExp[];
     flaggedOtherLabels: RegExp[];
@@ -17,7 +17,7 @@ export abstract class ExtensionInfo {
 
     constructor(config: Config) {
         this.platform = this.getPlatform();
-        this.algorithms = this.getAlgorithms(config);
+        this.algorithmPaths = this.getAlgorithmPaths(config);
 
         this.flaggedNameLabels = config.flaggedNameLabels.map(l => RegExp(l, 'g'));
         this.flaggedOtherLabels = config.flaggedOtherLabels.map(l => RegExp(l, 'g'));;
@@ -29,7 +29,7 @@ export abstract class ExtensionInfo {
     };
     
     abstract getPlatform(): Platform;
-    abstract getAlgorithms(config: Config): Algorithm[];
+    abstract getAlgorithmPaths(config: Config): string[];
     abstract getSplitBeforeNumericPivot(config: Config): boolean;
 };
 class WorkdayExtensionInfo extends ExtensionInfo {
@@ -37,12 +37,12 @@ class WorkdayExtensionInfo extends ExtensionInfo {
         return "Workday"
     }
 
-    getAlgorithms(config: Config): Algorithm[] {
-        const algorithms: Algorithm[] = [];
+    getAlgorithmPaths(config: Config): string[] {
+        const algorithms: string[] = [];
 
-        if (config.enableTableReplacement) algorithms.push({name: "table", filePath: "replace/tableNames.js"});
-        if (config.enableListReplacement) algorithms.push({name: "list", filePath: "replace/listNames.js"});
-        if (config.enableSimpleTemplateNameReplacement) algorithms.push({name: "simpleTemplateName", filePath: "replace/simpleTemplateNames.js"});
+        if (config.enableTableReplacement) algorithms.push("replace/tableNames.js");
+        if (config.enableListReplacement) algorithms.push("replace/listNames.js");
+        if (config.enableSimpleTemplateNameReplacement) algorithms.push("replace/simpleTemplateNames.js");
 
         return algorithms;
     };
@@ -56,12 +56,12 @@ class AppianExtensionInfo extends ExtensionInfo {
         return "Appian"
     }
 
-    getAlgorithms(config: Config): Algorithm[] {
-        const algorithms: Algorithm[] = [];
+    getAlgorithmPaths(config: Config): string[] {
+        const algorithms: string[] = [];
 
-        if (config.enableTableReplacement) algorithms.push({name: "table", filePath: "replace/tableNames.js"});
-        if (config.enableListReplacement) algorithms.push({name: "list", filePath: "replace/listNames.js"});
-        if (config.enableSimpleTemplateNameReplacement) algorithms.push({name: "simpleTemplateName", filePath: "replace/simpleTemplateNames.js"});
+        if (config.enableTableReplacement) algorithms.push("replace/tableNames.js");
+        if (config.enableListReplacement) algorithms.push("replace/listNames.js");
+        if (config.enableSimpleTemplateNameReplacement) algorithms.push("replace/simpleTemplateNames.js");
 
         return algorithms;
     };
