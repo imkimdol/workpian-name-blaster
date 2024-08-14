@@ -2,7 +2,7 @@ import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
-class SimpleTemplateDataAlgorithm implements Algorithm {
+abstract class SimpleTemplateDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
     helper: AlgorithmHelper;
 
@@ -32,26 +32,24 @@ class SimpleTemplateDataAlgorithm implements Algorithm {
      * Replaces any text that matches the anonymizing regex.
      * @param node - current HTML node
      */
-    private censorLeaf(node: Node) {
+    abstract censorLeaf(node: Node): void
+};
+class SimpleTemplateDataAlgorithmWorkday extends SimpleTemplateDataAlgorithm {
+    censorLeaf(node: Node): void {
         const value = node.nodeValue;
+        if (node.nodeType !== Node.TEXT_NODE || !value) return;
 
-        if (node.nodeType === Node.TEXT_NODE && value) {
-            if (this.extensionInfo.platform === "Workday") {
-                this.censorLeafWorkday(node, value);
-            } else {
-                this.censorLeafAppian(node, value);
-            }
-        }   
-    }
-
-    private censorLeafWorkday(node: Node, value: string) {
         const regexWD = /^([\S\-]+\s+)+\(\d{8}\).*$/;
-        if (value && regexWD.test(value)) {
-            node.nodeValue = this.helper.replaceData(value);
-        }
+            if (value && regexWD.test(value)) {
+                node.nodeValue = this.helper.replaceData(value);
+        };
     };
+};
+class SimpleTemplateDataAlgorithmAppian extends SimpleTemplateDataAlgorithm {
+    censorLeaf(node: Node): void {
+        const value = node.nodeValue;
+        if (node.nodeType !== Node.TEXT_NODE || !value) return;
 
-    private censorLeafAppian(node: Node, value: string) {
         const regexBar = /^(\d{8})(\s\|\s)(\S+\s*)+$/;
         const regexSID = /^\(\d{8}\)$/;
 
@@ -70,6 +68,10 @@ class SimpleTemplateDataAlgorithm implements Algorithm {
 };
 
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
-    return new SimpleTemplateDataAlgorithm(i, h);
-}
+    if (i.platform === "Workday") {
+        return new SimpleTemplateDataAlgorithmWorkday(i, h);
+    } else {
+        return new SimpleTemplateDataAlgorithmAppian(i, h);
+    }
+};
 export default getAlgorithm;

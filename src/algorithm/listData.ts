@@ -2,7 +2,7 @@ import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
-class ListDataAlgorithm implements Algorithm {
+abstract class ListDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
     helper: AlgorithmHelper;
 
@@ -14,28 +14,14 @@ class ListDataAlgorithm implements Algorithm {
     /**
      * Replaces WD elements manifesting as a list item with one div for the label and the other for the data to anonymize.
      */
-    censorData(): void {
-        if (this.extensionInfo.platform === "Appian") {
-            this.replaceListDataAppian();
-        } else {
-            this.replaceListDataWorkday()
-        }
-    }
-    private replaceListDataWorkday() {
-        const LIs = Array.from(document.getElementsByTagName("li"));
-        LIs.forEach(l => this.scanLI(l));
-    }
-    private replaceListDataAppian() {
-        const Elements = Array.from(document.getElementsByClassName("SideBySideGroup---side_by_side"));
-        Elements.forEach(l => this.scanLI(l));
-    }
+    abstract censorData(): void;
 
     /**
      * Scans each list item to see if it matches a WD label/data pairing with sensitive data.
      * @param element - the current HTML element
      * @returns automatically returns if the list item has less than 2 elements or does not have a label under the config file.
      */
-    private scanLI(element: Element) {
+    protected scanLI(element: Element) {
         const children = element.childNodes;
         if (children.length < 2) return;
 
@@ -69,8 +55,24 @@ class ListDataAlgorithm implements Algorithm {
         return 0;
     }
 };
+class ListDataAlgorithmWorkday extends ListDataAlgorithm {
+    censorData(): void {
+        const LIs = Array.from(document.getElementsByTagName("li"));
+        LIs.forEach(l => this.scanLI(l));
+    };
+};
+class ListDataAlgorithmAppian extends ListDataAlgorithm {
+    censorData(): void {
+        const Elements = Array.from(document.getElementsByClassName("SideBySideGroup---side_by_side"));
+        Elements.forEach(l => this.scanLI(l));
+    };
+};
 
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
-    return new ListDataAlgorithm(i, h);
-}
+    if (i.platform === "Workday") {
+        return new ListDataAlgorithmWorkday(i, h);
+    } else {
+        return new ListDataAlgorithmAppian(i, h);
+    }
+};
 export default getAlgorithm;
