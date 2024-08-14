@@ -1,31 +1,10 @@
-type Config = {
-    enableTableReplacement: boolean,
-    enableListReplacement: boolean,
-    enableSimpleTemplateNameReplacement: boolean,
-
-    flaggedNameLabels: string[],
-    flaggedOtherLabels: string[],
-
-    scanUsingNumericPivot: boolean,
-    splitBeforeNumericPivotWorkday: boolean,
-    splitBeforeNumericPivotAppian: boolean,
-    scanUsingColonPivot: boolean,
-    splitBeforeColonPivot: boolean
-};
-type SplitBeforeNumericPivotConfigName = "splitBeforeNumericPivotWorkday" | "splitBeforeNumericPivotAppian";
+import type { Config, SplitBeforeNumericPivotConfigName } from "./configParser";
 
 export type Algorithm = { name: AlgorithmName, filePath: string };
 export type AlgorithmName = "table" | "list" | "simpleTemplateName";
 export type Platform = "Workday" | "Appian";
 
-async function fetchConfigFile(): Promise<Config> {
-    const url = chrome.runtime.getURL("config.json");
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(response.statusText);
-
-    return await response.json();
-};
-const config = await fetchConfigFile() as Config; 
+const config = (await import(chrome.runtime.getURL("configParser.js"))) as Config;
 
 export class ExtensionInfo {
     platform: Platform;
