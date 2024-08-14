@@ -7,3 +7,4 @@ export interface Algorithm {
     helper: AlgorithmHelper;
     censorData(): void;
 };
+export type AlgorithmInstantiatorFunction = (extensionInfo: ExtensionInfo, helper: AlgorithmHelper) => Algorithm;

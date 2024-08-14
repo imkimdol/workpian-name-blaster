@@ -1,4 +1,4 @@
-import type { Algorithm } from './algorithm';
+import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
@@ -88,3 +88,8 @@ class TableNamesAlgorithm implements Algorithm {
         });
     };
 };
+
+const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
+    return new TableNamesAlgorithm(i, h);
+}
+export default getAlgorithm;

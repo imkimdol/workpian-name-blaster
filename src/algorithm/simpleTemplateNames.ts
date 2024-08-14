@@ -1,5 +1,5 @@
-import type { Algorithm } from './algorithm';
-import type { BiographicType, AlgorithmHelper } from './helper';
+import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
+import type { AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
 class SimpleTemplateNamesAlgorithm implements Algorithm {
@@ -68,3 +68,8 @@ class SimpleTemplateNamesAlgorithm implements Algorithm {
         }
     };
 };
+
+const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
+    return new SimpleTemplateNamesAlgorithm(i, h);
+}
+export default getAlgorithm;

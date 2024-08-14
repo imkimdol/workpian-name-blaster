@@ -1,4 +1,4 @@
-import type { Algorithm } from './algorithm';
+import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
@@ -70,3 +70,7 @@ class ListNamesAlgorithm implements Algorithm {
     }
 };
 
+const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
+    return new ListNamesAlgorithm(i, h);
+}
+export default getAlgorithm;

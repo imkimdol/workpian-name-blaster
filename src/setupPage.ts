@@ -1,15 +1,19 @@
+import type { Algorithm, AlgorithmInstantiatorFunction } from "./algorithm/algorithm";
 import type { ExtensionInfo } from "./extensionInfo";
+import type { AlgorithmHelper } from "./algorithm/helper";
 
 class SetupHelper {
     private readonly loopInterval = 2000;
 
-    private extensionInfo: ExtensionInfo
-    private replaceFunctions: VoidFunction[] = [];
+    private extensionInfo: ExtensionInfo;
+    private algorithmHelper: AlgorithmHelper;
+    private algorithms: Algorithm[] = [];
     
     private isBlastin = false;
     
-    constructor(extensionInfo: ExtensionInfo) {
+    constructor(extensionInfo: ExtensionInfo, algorithmHelper: AlgorithmHelper) {
         this.extensionInfo = extensionInfo;
+        this.algorithmHelper = algorithmHelper;
 
         this.addListener();
         this.setReplacementLoop();
@@ -21,8 +25,9 @@ class SetupHelper {
     private async importModules() {        
         for (const p of this.extensionInfo.algorithmPaths) {
             const url = chrome.runtime.getURL(p);
-            const importedFunction = (await import(url)).default;
-            if (importedFunction) this.replaceFunctions.push(importedFunction);
+            const instantiator: AlgorithmInstantiatorFunction = (await import(url)).default;
+            const algorithm: Algorithm = instantiator(this.extensionInfo, this.algorithmHelper);
+            if (algorithm) this.algorithms.push(algorithm);
         }
     };
     
@@ -30,8 +35,8 @@ class SetupHelper {
      * Runs selected modules to begin anonymizing.
      */
     private async replaceNames() {
-        if (this.replaceFunctions.length === 0) await this.importModules();
-        this.replaceFunctions.forEach(f => f());
+        if (this.algorithms.length === 0) await this.importModules();
+        this.algorithms.forEach(a => a.censorData());
     }
     
     /**
@@ -63,5 +68,9 @@ class SetupHelper {
 export default async function setupPage() {
     const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
     const extensionInfo = infoModule.info as ExtensionInfo;
-    new SetupHelper(extensionInfo);
+
+    const helperModule = await import(chrome.runtime.getURL("algorithm/helper.js"));
+    const algorithmHelper = new helperModule.AlgorithmHelper(extensionInfo) as AlgorithmHelper;
+
+    new SetupHelper(extensionInfo, algorithmHelper);
 };
