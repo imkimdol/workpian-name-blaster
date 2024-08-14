@@ -1,64 +1,70 @@
+import type { Algorithm } from './algorithm';
+import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
-const helpers = await import(chrome.runtime.getURL("algorithm/helpers.js"));
-const replaceName: (text: string) => string = helpers.replaceName;
+class SimpleTemplateNamesAlgorithm implements Algorithm {
+    extensionInfo: ExtensionInfo;
+    helper: AlgorithmHelper;
 
-const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
-const extensionInfo = infoModule.info as ExtensionInfo;
+    constructor(extensionInfo: ExtensionInfo, algorithmHelper: AlgorithmHelper) {
+        this.extensionInfo = extensionInfo;
+        this.helper = algorithmHelper;
+    };
 
-/**
- * Traversal function that takes in a node and runs replaceNSIDName on itself and its children.
- * @param node - current HTML node
- */
-export default function replaceSimpleTemplateNames(node: Node | null = null) {
-    if (!node) node = document.body;
+    /**
+     * Traversal function that takes in a node and runs replaceNSIDName on itself and its children.
+     * @param node - current HTML node
+     */
+    censorData(node: null | Node = null): void {
+        if (!node) node = document.body;
 
-    const children = node.childNodes;
+        const children = node.childNodes;
 
-    if (children.length === 0) {
-        replaceSimpleTemplateName(node);
-        return;
-    }
-    
-    children.forEach(c => replaceSimpleTemplateNames(c));
-}
-
-/**
- * Replaces any text that matches the anonymizing regex.
- * @param node - current HTML node
- */
-function replaceSimpleTemplateName(node: Node) {
-    const value = node.nodeValue;
-
-    if (node.nodeType === Node.TEXT_NODE && value) {
-        if (extensionInfo.platform === "Workday") {
-            replaceSimpleTemplateNameWorkday(node, value);
-        } else {
-            replaceSimpleTemplateNameAppian(node, value);
+        if (children.length === 0) {
+            this.replaceSimpleTemplateName(node);
+            return;
         }
-    }   
-}
+    
+        children.forEach(c => this.censorData(c));
+    };
 
-function replaceSimpleTemplateNameWorkday(node: Node, value: string) {
-    const regexWD = /^([\S\-]+\s+)+\(\d{8}\).*$/;
-    if (value && regexWD.test(value)) {
-        node.nodeValue = replaceName(value);
+    /**
+     * Replaces any text that matches the anonymizing regex.
+     * @param node - current HTML node
+     */
+    private replaceSimpleTemplateName(node: Node) {
+        const value = node.nodeValue;
+
+        if (node.nodeType === Node.TEXT_NODE && value) {
+            if (this.extensionInfo.platform === "Workday") {
+                this.replaceSimpleTemplateNameWorkday(node, value);
+            } else {
+                this.replaceSimpleTemplateNameAppian(node, value);
+            }
+        }   
     }
-};
 
-function replaceSimpleTemplateNameAppian(node: Node, value: string) {
-    const regexBar = /^(\d{8})(\s\|\s)(\S+\s*)+$/;
-    const regexSID = /^\(\d{8}\)$/;
+    private replaceSimpleTemplateNameWorkday(node: Node, value: string) {
+        const regexWD = /^([\S\-]+\s+)+\(\d{8}\).*$/;
+        if (value && regexWD.test(value)) {
+            node.nodeValue = this.helper.replaceName(value);
+        }
+    };
 
-    if (value && regexBar.test(value)) {
-        node.nodeValue = replaceName(value);
-    } else if (value && regexSID.test(value)) {
-        const parentNode = node.parentElement?.previousSibling?.previousSibling;
-        if (parentNode && parentNode.nodeType === Node.TEXT_NODE) {
-            const parentValue = parentNode.nodeValue;
-            if (parentValue) {
-                parentNode.nodeValue = replaceName(parentValue);
+    private replaceSimpleTemplateNameAppian(node: Node, value: string) {
+        const regexBar = /^(\d{8})(\s\|\s)(\S+\s*)+$/;
+        const regexSID = /^\(\d{8}\)$/;
+
+        if (value && regexBar.test(value)) {
+            node.nodeValue = this.helper.replaceName(value);
+        } else if (value && regexSID.test(value)) {
+            const parentNode = node.parentElement?.previousSibling?.previousSibling;
+            if (parentNode && parentNode.nodeType === Node.TEXT_NODE) {
+                const parentValue = parentNode.nodeValue;
+                if (parentValue) {
+                    parentNode.nodeValue = this.helper.replaceName(parentValue);
+                }
             }
         }
-    }
+    };
 };

@@ -1,5 +1,4 @@
 import type { Config } from "./configParser";
-export type Algorithm = { name: AlgorithmName, filePath: string };
 export type AlgorithmName = "table" | "list" | "simpleTemplateName";
 export type Platform = "Workday" | "Appian";
 

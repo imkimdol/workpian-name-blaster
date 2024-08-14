@@ -1,4 +1,4 @@
-import type { ExtensionInfo, Algorithm } from "./extensionInfo";
+import type { ExtensionInfo } from "./extensionInfo";
 
 class SetupHelper {
     private readonly loopInterval = 2000;
