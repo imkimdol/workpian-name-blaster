@@ -4,7 +4,7 @@ export type Algorithm = { name: AlgorithmName, filePath: string };
 export type AlgorithmName = "table" | "list" | "simpleTemplateName";
 export type Platform = "Workday" | "Appian";
 
-const config = (await import(chrome.runtime.getURL("configParser.js"))) as Config;
+const config = (await import(chrome.runtime.getURL("configParser.js"))).default as Config;
 
 export class ExtensionInfo {
     platform: Platform;

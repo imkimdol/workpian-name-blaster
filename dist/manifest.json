@@ -23,6 +23,7 @@
       "matches": ["https://*.myworkday.com/*", "https://*.appiancloud.com/*"],
       "resources": [
         "config.json",
+        "configParser.js",
         "extensionInfo.js",
         "setupPage.js",
         "replace/helpers.js",
