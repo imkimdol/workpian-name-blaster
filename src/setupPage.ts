@@ -1,6 +1,8 @@
 import type { ExtensionInfo, Algorithm } from "./extensionInfo";
 
 class SetupHelper {
+    private readonly loopInterval = 2000;
+
     private algorithms: Algorithm[];
     private replaceFunctions: VoidFunction[] = [];
     
@@ -54,7 +56,7 @@ class SetupHelper {
      * Function to anonymize every defined amount of time (2 seconds).
      */
     private setReplacementLoop() {
-        setInterval(() => {if (this.isBlastin) this.replaceNames();}, 2000);
+        setInterval(() => {if (this.isBlastin) this.replaceNames();}, this.loopInterval);
     }
 };
 
