@@ -1,6 +1,9 @@
 import type { ExtensionInfo } from "../extensionInfo";
-
 export enum BiographicType {None, Name, Other};
+
+/**
+ * An abstraction that holds all common functions used by algorithm classes.
+ */
 export class AlgorithmHelper {
     private extensionInfo: ExtensionInfo;
 

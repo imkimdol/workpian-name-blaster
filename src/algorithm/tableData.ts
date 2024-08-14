@@ -2,6 +2,9 @@ import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
+/**
+ * An algorithm used for censoring data in tables.
+ */
 abstract class TableDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
     helper: AlgorithmHelper;
@@ -15,7 +18,7 @@ abstract class TableDataAlgorithm implements Algorithm {
         const tables = Array.from(document.getElementsByTagName("table"));
         tables.forEach(t => this.scanTable(t));
     };
-
+    
     private scanTable(table: HTMLTableElement) {
         const head = table.tHead;
         if (!head) return;
@@ -91,6 +94,10 @@ abstract class TableDataAlgorithm implements Algorithm {
 class TableDataAlgorithmWorkday extends TableDataAlgorithm {};
 class TableDataAlgorithmAppian extends TableDataAlgorithm {};
 
+/**
+ * Creates an instance of `TableDataAlgorithm` that matches the current platform.
+ * @returns The instantiated class.
+ */
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
     if (i.platform === "Workday") {
         return new TableDataAlgorithmWorkday(i, h);

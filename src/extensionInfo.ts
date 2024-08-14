@@ -1,6 +1,10 @@
 import type { Config } from "./configParser";
 export type Platform = "Workday" | "Appian";
 
+/**
+ * Holds all information about the current instance of the extension.
+ * Configs and platform info are stored here.
+ */
 export abstract class ExtensionInfo {
     platform: Platform;
     algorithmPaths: string[];
@@ -27,7 +31,21 @@ export abstract class ExtensionInfo {
     };
     
     abstract getPlatform(): Platform;
+
+    /**
+     * Returns the list of algorithms required for the platform in local path form.
+     * 
+     * @param config The parsed config data.
+     */
     abstract getAlgorithmPaths(config: Config): string[];
+
+    /**
+     * Returns the splitBeforeNumericPivot value that matches the current platform.
+     * 
+     * e.g. WorkdayExtensionInfo returns config.splitBeforeNumericPivotWorkday.
+     * 
+     * @param config The parsed config data.
+     */
     abstract getSplitBeforeNumericPivot(config: Config): boolean;
 };
 class WorkdayExtensionInfo extends ExtensionInfo {
@@ -36,13 +54,13 @@ class WorkdayExtensionInfo extends ExtensionInfo {
     }
 
     getAlgorithmPaths(config: Config): string[] {
-        const algorithms: string[] = [];
+        const paths: string[] = [];
 
-        if (config.enableTableAlgorithm) algorithms.push("algorithm/tableData.js");
-        if (config.enableListAlgorithm) algorithms.push("algorithm/listData.js");
-        if (config.enableSimpleTemplateAlgorithm) algorithms.push("algorithm/simpleTemplateData.js");
+        if (config.enableTableAlgorithm) paths.push("algorithm/tableData.js");
+        if (config.enableListAlgorithm) paths.push("algorithm/listData.js");
+        if (config.enableSimpleTemplateAlgorithm) paths.push("algorithm/simpleTemplateData.js");
 
-        return algorithms;
+        return paths;
     };
 
     getSplitBeforeNumericPivot(config: Config): boolean {
@@ -69,6 +87,10 @@ class AppianExtensionInfo extends ExtensionInfo {
     }
 };
 
+/**
+ * Creates an instance of `ExtensionInfo` that matches the current platform.
+ * @returns The instantiated class.
+ */
 async function getExtensionInfo(): Promise<ExtensionInfo> {
     const config = (await import(chrome.runtime.getURL("configParser.js"))).default as Config;
 

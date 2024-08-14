@@ -2,6 +2,9 @@ import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
+/**
+ * An algorithm used for censoring data in list form.
+ */
 abstract class ListDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
     helper: AlgorithmHelper;
@@ -11,9 +14,6 @@ abstract class ListDataAlgorithm implements Algorithm {
         this.helper = algorithmHelper;
     }
     
-    /**
-     * Replaces WD elements manifesting as a list item with one div for the label and the other for the data to anonymize.
-     */
     abstract censorData(): void;
 
     /**
@@ -68,6 +68,10 @@ class ListDataAlgorithmAppian extends ListDataAlgorithm {
     };
 };
 
+/**
+ * Creates an instance of `ListDataAlgorithm` that matches the current platform.
+ * @returns The instantiated class.
+ */
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
     if (i.platform === "Workday") {
         return new ListDataAlgorithmWorkday(i, h);
