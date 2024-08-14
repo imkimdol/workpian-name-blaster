@@ -15,44 +15,40 @@ export abstract class ExtensionInfo {
     scanUsingColonPivot: boolean;
     splitBeforeColonPivot: boolean;
 
-    protected config: Config;
-
     constructor(config: Config) {
-        this.config = config;
-
         this.platform = this.getPlatform();
-        this.algorithms = this.getAlgorithms();
+        this.algorithms = this.getAlgorithms(config);
 
         this.flaggedNameLabels = config.flaggedNameLabels.map(l => RegExp(l, 'g'));
         this.flaggedOtherLabels = config.flaggedOtherLabels.map(l => RegExp(l, 'g'));;
 
         this.scanUsingNumericPivot = config.scanUsingNumericPivot;
-        this.splitBeforeNumericPivot = this.getSplitBeforeNumericPivot();
+        this.splitBeforeNumericPivot = this.getSplitBeforeNumericPivot(config);
         this.scanUsingColonPivot = config.scanUsingColonPivot;
         this.splitBeforeColonPivot = config.splitBeforeColonPivot;
     };
     
     abstract getPlatform(): Platform;
-    abstract getAlgorithms(): Algorithm[];
-    abstract getSplitBeforeNumericPivot(): boolean;
+    abstract getAlgorithms(config: Config): Algorithm[];
+    abstract getSplitBeforeNumericPivot(config: Config): boolean;
 };
 class WorkdayExtensionInfo extends ExtensionInfo {
     getPlatform(): Platform {
         return "Workday"
     }
 
-    getAlgorithms(): Algorithm[] {
+    getAlgorithms(config: Config): Algorithm[] {
         const algorithms: Algorithm[] = [];
 
-        if (this.config.enableTableReplacement) algorithms.push({name: "table", filePath: "replace/tableNames.js"});
-        if (this.config.enableListReplacement) algorithms.push({name: "list", filePath: "replace/listNames.js"});
-        if (this.config.enableSimpleTemplateNameReplacement) algorithms.push({name: "simpleTemplateName", filePath: "replace/simpleTemplateNames.js"});
+        if (config.enableTableReplacement) algorithms.push({name: "table", filePath: "replace/tableNames.js"});
+        if (config.enableListReplacement) algorithms.push({name: "list", filePath: "replace/listNames.js"});
+        if (config.enableSimpleTemplateNameReplacement) algorithms.push({name: "simpleTemplateName", filePath: "replace/simpleTemplateNames.js"});
 
         return algorithms;
     };
 
-    getSplitBeforeNumericPivot(): boolean {
-        return this.config.splitBeforeNumericPivotWorkday;
+    getSplitBeforeNumericPivot(config: Config): boolean {
+        return config.splitBeforeNumericPivotWorkday;
     }
 };
 class AppianExtensionInfo extends ExtensionInfo {
@@ -60,18 +56,18 @@ class AppianExtensionInfo extends ExtensionInfo {
         return "Appian"
     }
 
-    getAlgorithms(): Algorithm[] {
+    getAlgorithms(config: Config): Algorithm[] {
         const algorithms: Algorithm[] = [];
 
-        if (this.config.enableTableReplacement) algorithms.push({name: "table", filePath: "replace/tableNames.js"});
-        if (this.config.enableListReplacement) algorithms.push({name: "list", filePath: "replace/listNames.js"});
-        if (this.config.enableSimpleTemplateNameReplacement) algorithms.push({name: "simpleTemplateName", filePath: "replace/simpleTemplateNames.js"});
+        if (config.enableTableReplacement) algorithms.push({name: "table", filePath: "replace/tableNames.js"});
+        if (config.enableListReplacement) algorithms.push({name: "list", filePath: "replace/listNames.js"});
+        if (config.enableSimpleTemplateNameReplacement) algorithms.push({name: "simpleTemplateName", filePath: "replace/simpleTemplateNames.js"});
 
         return algorithms;
     };
 
-    getSplitBeforeNumericPivot(): boolean {
-        return this.config.splitBeforeNumericPivotAppian;
+    getSplitBeforeNumericPivot(config: Config): boolean {
+        return config.splitBeforeNumericPivotAppian;
     }
 };
 
