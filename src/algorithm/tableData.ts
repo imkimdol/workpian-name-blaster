@@ -2,7 +2,7 @@ import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
-class TableDataAlgorithm implements Algorithm {
+abstract class TableDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
     helper: AlgorithmHelper;
 
@@ -88,8 +88,14 @@ class TableDataAlgorithm implements Algorithm {
         });
     };
 };
+class TableDataAlgorithmWorkday extends TableDataAlgorithm {};
+class TableDataAlgorithmAppian extends TableDataAlgorithm {};
 
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
-    return new TableDataAlgorithm(i, h);
-}
+    if (i.platform === "Workday") {
+        return new TableDataAlgorithmWorkday(i, h);
+    } else {
+        return new TableDataAlgorithmAppian(i, h);
+    }
+};
 export default getAlgorithm;
