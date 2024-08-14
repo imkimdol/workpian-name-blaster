@@ -35,7 +35,6 @@ function scanHeadRowCell(cell: HTMLTableCellElement, isBioInfoColumn: Biographic
     if (!scope) {
         const className = cell.className;
         if (className === "PagingGridLayout---checkbox") {
-            console.log(className);
             isBioInfoColumn.push(checkForFlaggedText(cell.innerText));
         }
         return;

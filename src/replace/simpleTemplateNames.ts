@@ -4,7 +4,7 @@ const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
 const replaceName: (text: string) => string = helpers.replaceName;
 
 const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
-const extensionInfo = new (infoModule.ExtensionInfo)() as ExtensionInfo;
+const extensionInfo = infoModule.info as ExtensionInfo;
 
 /**
  * Traversal function that takes in a node and runs replaceNSIDName on itself and its children.

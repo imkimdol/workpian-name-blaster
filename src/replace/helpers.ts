@@ -3,7 +3,7 @@ import type { ExtensionInfo } from "../extensionInfo";
 export enum BiographicType {None, Name, Other};
 
 const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
-const extensionInfo = new (infoModule.ExtensionInfo)() as ExtensionInfo;
+const extensionInfo = infoModule.info as ExtensionInfo;
 
 /**
  * Checks if the string is included in the config as text to flag as sensitive data.

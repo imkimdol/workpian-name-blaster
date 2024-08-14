@@ -60,6 +60,6 @@ class SetupHelper {
 
 export default async function setupPage() {
     const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
-    const extensionInfo = new (infoModule.ExtensionInfo)() as ExtensionInfo;
+    const extensionInfo = infoModule.info as ExtensionInfo;
     new SetupHelper(extensionInfo.algorithms);
 };
