@@ -1,6 +1,6 @@
 import type { BiographicType } from './helpers';
 
-const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
+const helpers = await import(chrome.runtime.getURL("algorithm/helpers.js"));
 const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
 const replaceNodeText: (node: Node, bioType: BiographicType) => void = helpers.replaceNodeText;
 

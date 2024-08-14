@@ -26,10 +26,10 @@
         "configParser.js",
         "extensionInfo.js",
         "setupPage.js",
-        "replace/helpers.js",
-        "replace/listNames.js",
-        "replace/simpleTemplateNames.js",
-        "replace/tableNames.js"
+        "algorithm/helpers.js",
+        "algorithm/listNames.js",
+        "algorithm/simpleTemplateNames.js",
+        "algorithm/tableNames.js"
       ]
     }
   ]

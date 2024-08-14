@@ -1,6 +1,6 @@
 import type { ExtensionInfo } from "../extensionInfo";
 
-const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
+const helpers = await import(chrome.runtime.getURL("algorithm/helpers.js"));
 const replaceName: (text: string) => string = helpers.replaceName;
 
 const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));

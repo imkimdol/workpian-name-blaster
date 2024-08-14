@@ -40,9 +40,9 @@ class WorkdayExtensionInfo extends ExtensionInfo {
     getAlgorithmPaths(config: Config): string[] {
         const algorithms: string[] = [];
 
-        if (config.enableTableReplacement) algorithms.push("replace/tableNames.js");
-        if (config.enableListReplacement) algorithms.push("replace/listNames.js");
-        if (config.enableSimpleTemplateNameReplacement) algorithms.push("replace/simpleTemplateNames.js");
+        if (config.enableTableReplacement) algorithms.push("algorithm/tableNames.js");
+        if (config.enableListReplacement) algorithms.push("algorithm/listNames.js");
+        if (config.enableSimpleTemplateNameReplacement) algorithms.push("algorithm/simpleTemplateNames.js");
 
         return algorithms;
     };
@@ -59,9 +59,9 @@ class AppianExtensionInfo extends ExtensionInfo {
     getAlgorithmPaths(config: Config): string[] {
         const algorithms: string[] = [];
 
-        if (config.enableTableReplacement) algorithms.push("replace/tableNames.js");
-        if (config.enableListReplacement) algorithms.push("replace/listNames.js");
-        if (config.enableSimpleTemplateNameReplacement) algorithms.push("replace/simpleTemplateNames.js");
+        if (config.enableTableReplacement) algorithms.push("algorithm/tableNames.js");
+        if (config.enableListReplacement) algorithms.push("algorithm/listNames.js");
+        if (config.enableSimpleTemplateNameReplacement) algorithms.push("algorithm/simpleTemplateNames.js");
 
         return algorithms;
     };
