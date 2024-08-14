@@ -1,13 +1,14 @@
-type ModuleInfo = { enableConfigName: string, fileName: string };
+import type { ExtensionInfo, Algorithm } from "./extensionInfo";
 
-abstract class SetupPage {
-    private config: any;
-    protected modules: ModuleInfo[] = [];
+class SetupHelper {
+    private algorithms: Algorithm[];
     private replaceFunctions: VoidFunction[] = [];
     
     private isBlastin = false;
     
-    constructor() {
+    constructor(algorithms: Algorithm[]) {
+        this.algorithms = algorithms;
+
         this.addListener();
         this.setReplacementLoop();
     };
@@ -15,22 +16,9 @@ abstract class SetupPage {
     /**
      * Imports parser for config file and required modules.
      */
-    private async importModules() {
-        const configParser = await import(chrome.runtime.getURL("configParser.js"));
-        this.config = configParser.config;
-        if (!this.config) throw new Error("Unable to load config!");
-        
-        for (const module of this.modules) {
-            await this.importModule(module);
-        }
-    };
-
-    private async importModule(info: ModuleInfo) {
-        const enabled = this.config[info.enableConfigName];
-
-        if (enabled) {
-            const url = chrome.runtime.getURL(info.fileName);
-            console.log(url);
+    private async importModules() {        
+        for (const a of this.algorithms) {
+            const url = chrome.runtime.getURL(a.filePath);
             const importedFunction = (await import(url)).default;
             if (importedFunction) this.replaceFunctions.push(importedFunction);
         }
@@ -70,24 +58,8 @@ abstract class SetupPage {
     }
 };
 
-export class Workday extends SetupPage {
-    constructor() {
-        super();
-        this.modules = [
-            { enableConfigName: "enableListReplacement", fileName: "replace/listNames.js"},
-            { enableConfigName: "enableTableReplacement", fileName: "replace/tableNames.js"},
-            { enableConfigName: "enableSimpleTemplateNameReplacement", fileName: "replace/simpleTemplateNames.js"},
-        ]
-    };
-};
-
-export class Appian extends SetupPage {
-    constructor() {
-        super();
-        this.modules = [
-            { enableConfigName: "enableListReplacement", fileName: "replace/listNamesAppian.js"},
-            { enableConfigName: "enableTableReplacement", fileName: "replace/tableNames.js"},
-            { enableConfigName: "enableSimpleTemplateNameReplacement", fileName: "replace/simpleTemplateNames.js"},
-        ]
-    };
+export default async function setupPage() {
+    const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
+    const extensionInfo = new (infoModule.ExtensionInfo)() as ExtensionInfo;
+    new SetupHelper(extensionInfo.algorithms);
 };

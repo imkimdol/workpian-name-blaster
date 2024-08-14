@@ -2,7 +2,6 @@
   "enableTableReplacement": true,
   "enableListReplacement": true,
   "enableSimpleTemplateNameReplacement": true,
-  "currentPage": "workday",
 
   "flaggedNameLabels": [
     "^(?!.*(Award|Cohort).*Name).*Name.*",
@@ -29,8 +28,9 @@
     "Contact Information"
   ],
 
-  "ScanUsingNumericPivot": true,
-  "SplitBeforeNumericPivot": true,
-  "ScanUsingColonPivot": true,
-  "SplitBeforeColonPivot": true
+  "scanUsingNumericPivot": true,
+  "splitBeforeNumericPivotWorkday": true,
+  "splitBeforeNumericPivotAppian": false,
+  "scanUsingColonPivot": true,
+  "splitBeforeColonPivot": false
 }

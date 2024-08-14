@@ -1,18 +1,18 @@
 import type { BiographicType } from './helpers';
-import type { Config } from "../configParser";
+import type { ExtensionInfo } from "../extensionInfo";
 
 const helpers = await import(chrome.runtime.getURL("replace/helpers.js"));
 const checkForFlaggedText: (text: string) => BiographicType = helpers.checkForFlaggedText;
 const replaceNodeText: (node: Node, bioType: BiographicType) => void = helpers.replaceNodeText;
 
-const configParser = await import(chrome.runtime.getURL("configParser.js"));
-const config: Config = configParser.config;
+const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
+const extensionInfo = new (infoModule.ExtensionInfo)() as ExtensionInfo;
 
 /**
  * Replaces WD elements manifesting as a list item with one div for the label and the other for the data to anonymize.
  */
 export default function replaceListNames() {
-    if (config.currentPage === "appian") {
+    if (extensionInfo.platform = "Appian") {
         replaceListNamesAppian();
     } else {
         replaceListNamesWorkday()

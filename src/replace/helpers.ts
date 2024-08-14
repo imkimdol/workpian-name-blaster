@@ -1,9 +1,9 @@
-import type { Config } from "../configParser";
+import type { ExtensionInfo } from "../extensionInfo";
 
 export enum BiographicType {None, Name, Other};
 
-const configParser = await import(chrome.runtime.getURL("configParser.js"));
-const config: Config = configParser.config;
+const infoModule = await import(chrome.runtime.getURL("extensionInfo.js"));
+const extensionInfo = new (infoModule.ExtensionInfo)() as ExtensionInfo;
 
 /**
  * Checks if the string is included in the config as text to flag as sensitive data.
@@ -13,12 +13,12 @@ const config: Config = configParser.config;
 export function checkForFlaggedText(text: string): BiographicType {
     // -- Checking if `text` matches any element in the Name labels --
     // a shorthand way to match `text` to all JSON entries in config.json
-    const isNameLabel = config.flaggedNameLabels.reduce((a,r) => labelReduceCallback(a,r,text), false);
+    const isNameLabel = extensionInfo.flaggedNameLabels.reduce((a,r) => labelReduceCallback(a,r,text), false);
     if (isNameLabel) return BiographicType.Name;
 
     // -- Checking if `text` matches any element in the Other labels --
     // a shorthand way to match `text` to all JSON entries in config.json
-    const isOtherLabel = config.flaggedOtherLabels.reduce((a,r) => labelReduceCallback(a,r,text), false);
+    const isOtherLabel = extensionInfo.flaggedOtherLabels.reduce((a,r) => labelReduceCallback(a,r,text), false);
     return isOtherLabel ? BiographicType.Other : BiographicType.None;
 }
 
@@ -29,9 +29,8 @@ export function checkForFlaggedText(text: string): BiographicType {
  * @param text - the string to test
  * @returns `true` if regexString matches text, `false` otherwise
  */
-function labelReduceCallback(accumulator: boolean, regexString: string, text: string) {
+function labelReduceCallback(accumulator: boolean, regex: RegExp, text: string) {
     if (accumulator) return true;
-    const regex = RegExp(regexString, "g");
     return regex.test(text);
 }
 
@@ -70,22 +69,15 @@ export function replaceNodeText(node: Node, bioType: BiographicType) {
 export function replaceName(text: string): string {
     let beforeText = text;
     
-    if (config.currentPage === "appian") {
-        if (config.ScanUsingNumericPivot) {
-            const split = beforeText.split(/\d/);
-            if (!config.SplitBeforeNumericPivot) beforeText = split[0];
-            else if (beforeText.length > 1) beforeText = split[split.length - 1];
-        }
-    }
-    if (config.ScanUsingNumericPivot) {
+    if (extensionInfo.scanUsingNumericPivot) {
         const split = beforeText.split(/\d/);
-        if (config.SplitBeforeNumericPivot) beforeText = split[0];
+        if (extensionInfo.splitBeforeNumericPivot) beforeText = split[0];
         else if (beforeText.length > 1) beforeText = split[split.length - 1];
     }
 
-    if (config.ScanUsingColonPivot) {
+    if (extensionInfo.scanUsingColonPivot) {
         const split = beforeText.split(":");
-        if (config.SplitBeforeColonPivot) beforeText = split[0];       
+        if (extensionInfo.splitBeforeColonPivot) beforeText = split[0];       
         else if (beforeText.length > 1) beforeText = split[split.length - 1];
     }
 
