@@ -34,7 +34,7 @@ class SetupHelper {
     /**
      * Runs selected modules to begin anonymizing.
      */
-    private async replaceNames() {
+    private async censorData() {
         if (this.algorithms.length === 0) await this.importModules();
         this.algorithms.forEach(a => a.censorData());
     }
@@ -45,7 +45,7 @@ class SetupHelper {
     private addListener() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (message.action === 'startBlastin') {
-                this.replaceNames()
+                this.censorData()
                 this.isBlastin = true
                 sendResponse();
             } else if (message.action === 'stopBlastin') {
@@ -61,7 +61,7 @@ class SetupHelper {
      * Function to anonymize every defined amount of time (2 seconds).
      */
     private setReplacementLoop() {
-        setInterval(() => {if (this.isBlastin) this.replaceNames();}, this.loopInterval);
+        setInterval(() => {if (this.isBlastin) this.censorData();}, this.loopInterval);
     }
 };
 

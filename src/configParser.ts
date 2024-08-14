@@ -1,7 +1,7 @@
 export type Config = {
     enableTableReplacement: boolean,
     enableListReplacement: boolean,
-    enableSimpleTemplateNameReplacement: boolean,
+    enableSimpleTemplateReplacement: boolean,
 
     flaggedNameLabels: string[],
     flaggedOtherLabels: string[],

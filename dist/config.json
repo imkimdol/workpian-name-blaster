@@ -1,7 +1,7 @@
 {
   "enableTableReplacement": true,
   "enableListReplacement": true,
-  "enableSimpleTemplateNameReplacement": true,
+  "enableSimpleTemplateReplacement": true,
 
   "flaggedNameLabels": [
     "^(?!.*(Award|Cohort).*Name).*Name.*",

@@ -1,5 +1,4 @@
 import type { Config } from "./configParser";
-export type AlgorithmName = "table" | "list" | "simpleTemplateName";
 export type Platform = "Workday" | "Appian";
 
 export abstract class ExtensionInfo {
@@ -39,9 +38,9 @@ class WorkdayExtensionInfo extends ExtensionInfo {
     getAlgorithmPaths(config: Config): string[] {
         const algorithms: string[] = [];
 
-        if (config.enableTableReplacement) algorithms.push("algorithm/tableNames.js");
-        if (config.enableListReplacement) algorithms.push("algorithm/listNames.js");
-        if (config.enableSimpleTemplateNameReplacement) algorithms.push("algorithm/simpleTemplateNames.js");
+        if (config.enableTableReplacement) algorithms.push("algorithm/tableData.js");
+        if (config.enableListReplacement) algorithms.push("algorithm/listData.js");
+        if (config.enableSimpleTemplateReplacement) algorithms.push("algorithm/simpleTemplateData.js");
 
         return algorithms;
     };
@@ -58,9 +57,9 @@ class AppianExtensionInfo extends ExtensionInfo {
     getAlgorithmPaths(config: Config): string[] {
         const algorithms: string[] = [];
 
-        if (config.enableTableReplacement) algorithms.push("algorithm/tableNames.js");
-        if (config.enableListReplacement) algorithms.push("algorithm/listNames.js");
-        if (config.enableSimpleTemplateNameReplacement) algorithms.push("algorithm/simpleTemplateNames.js");
+        if (config.enableTableReplacement) algorithms.push("algorithm/tableData.js");
+        if (config.enableListReplacement) algorithms.push("algorithm/listData.js");
+        if (config.enableSimpleTemplateReplacement) algorithms.push("algorithm/simpleTemplateData.js");
 
         return algorithms;
     };

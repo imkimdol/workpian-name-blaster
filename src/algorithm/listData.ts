@@ -2,7 +2,7 @@ import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { BiographicType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
-class ListNamesAlgorithm implements Algorithm {
+class ListDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
     helper: AlgorithmHelper;
 
@@ -16,16 +16,16 @@ class ListNamesAlgorithm implements Algorithm {
      */
     censorData(): void {
         if (this.extensionInfo.platform === "Appian") {
-            this.replaceListNamesAppian();
+            this.replaceListDataaaAppian();
         } else {
-            this.replaceListNamesWorkday()
+            this.replaceListDataWorkday()
         }
     }
-    private replaceListNamesWorkday() {
+    private replaceListDataWorkday() {
         const LIs = Array.from(document.getElementsByTagName("li"));
         LIs.forEach(l => this.scanLI(l));
     }
-    private replaceListNamesAppian() {
+    private replaceListDataaaAppian() {
         const Elements = Array.from(document.getElementsByClassName("SideBySideGroup---side_by_side"));
         Elements.forEach(l => this.scanLI(l));
     }
@@ -71,6 +71,6 @@ class ListNamesAlgorithm implements Algorithm {
 };
 
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
-    return new ListNamesAlgorithm(i, h);
+    return new ListDataAlgorithm(i, h);
 }
 export default getAlgorithm;

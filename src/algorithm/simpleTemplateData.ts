@@ -2,7 +2,7 @@ import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
 import type { AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
-class SimpleTemplateNamesAlgorithm implements Algorithm {
+class SimpleTemplateDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
     helper: AlgorithmHelper;
 
@@ -21,7 +21,7 @@ class SimpleTemplateNamesAlgorithm implements Algorithm {
         const children = node.childNodes;
 
         if (children.length === 0) {
-            this.replaceSimpleTemplateName(node);
+            this.censorLeaf(node);
             return;
         }
     
@@ -32,37 +32,37 @@ class SimpleTemplateNamesAlgorithm implements Algorithm {
      * Replaces any text that matches the anonymizing regex.
      * @param node - current HTML node
      */
-    private replaceSimpleTemplateName(node: Node) {
+    private censorLeaf(node: Node) {
         const value = node.nodeValue;
 
         if (node.nodeType === Node.TEXT_NODE && value) {
             if (this.extensionInfo.platform === "Workday") {
-                this.replaceSimpleTemplateNameWorkday(node, value);
+                this.censorLeafWorkday(node, value);
             } else {
-                this.replaceSimpleTemplateNameAppian(node, value);
+                this.censorLeafAppian(node, value);
             }
         }   
     }
 
-    private replaceSimpleTemplateNameWorkday(node: Node, value: string) {
+    private censorLeafWorkday(node: Node, value: string) {
         const regexWD = /^([\S\-]+\s+)+\(\d{8}\).*$/;
         if (value && regexWD.test(value)) {
-            node.nodeValue = this.helper.replaceName(value);
+            node.nodeValue = this.helper.replaceData(value);
         }
     };
 
-    private replaceSimpleTemplateNameAppian(node: Node, value: string) {
+    private censorLeafAppian(node: Node, value: string) {
         const regexBar = /^(\d{8})(\s\|\s)(\S+\s*)+$/;
         const regexSID = /^\(\d{8}\)$/;
 
         if (value && regexBar.test(value)) {
-            node.nodeValue = this.helper.replaceName(value);
+            node.nodeValue = this.helper.replaceData(value);
         } else if (value && regexSID.test(value)) {
             const parentNode = node.parentElement?.previousSibling?.previousSibling;
             if (parentNode && parentNode.nodeType === Node.TEXT_NODE) {
                 const parentValue = parentNode.nodeValue;
                 if (parentValue) {
-                    parentNode.nodeValue = this.helper.replaceName(parentValue);
+                    parentNode.nodeValue = this.helper.replaceData(parentValue);
                 }
             }
         }
@@ -70,6 +70,6 @@ class SimpleTemplateNamesAlgorithm implements Algorithm {
 };
 
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
-    return new SimpleTemplateNamesAlgorithm(i, h);
+    return new SimpleTemplateDataAlgorithm(i, h);
 }
 export default getAlgorithm;

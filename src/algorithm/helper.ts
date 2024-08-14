@@ -48,7 +48,7 @@ export class AlgorithmHelper {
 
         if (children.length === 0 && value && node.nodeType === Node.TEXT_NODE) {
             if (bioType === BiographicType.Name) {
-                node.nodeValue = this.replaceName(value);
+                node.nodeValue = this.replaceData(value);
             } else {
                 node.nodeValue = this.replaceTextWithDashes(value);
             }
@@ -69,7 +69,7 @@ export class AlgorithmHelper {
      * @param text - the string to be anonymized
      * @returns (string) the string with the specific portion anonymized
      */
-    replaceName(text: string): string {
+    replaceData(text: string): string {
         let beforeText = text;
         
         if (this.extensionInfo.scanUsingNumericPivot) {

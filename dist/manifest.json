@@ -27,9 +27,9 @@
         "extensionInfo.js",
         "setupPage.js",
         "algorithm/helper.js",
-        "algorithm/listNames.js",
-        "algorithm/simpleTemplateNames.js",
-        "algorithm/tableNames.js"
+        "algorithm/listData.js",
+        "algorithm/simpleTemplateData.js",
+        "algorithm/tableData.js"
       ]
     }
   ]
