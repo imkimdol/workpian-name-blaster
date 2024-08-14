@@ -42,20 +42,20 @@ export class AlgorithmHelper {
      * @param node - the HTML Node to modify
      * @param bioType - if Name, replaces using logic involving names. Otherwise, replace everything.
      */
-    replaceNodeText(node: Node, bioType: BiographicType) {
+    censorNodeText(node: Node, bioType: BiographicType) {
         const children = node.childNodes;
         const value = node.nodeValue;
 
         if (children.length === 0 && value && node.nodeType === Node.TEXT_NODE) {
             if (bioType === BiographicType.Name) {
-                node.nodeValue = this.replaceData(value);
+                node.nodeValue = this.censorData(value);
             } else {
                 node.nodeValue = this.replaceTextWithDashes(value);
             }
             return;
         }
 
-        children.forEach(c => this.replaceNodeText(c, bioType));
+        children.forEach(c => this.censorNodeText(c, bioType));
     }
 
     /**
@@ -69,7 +69,7 @@ export class AlgorithmHelper {
      * @param text - the string to be anonymized
      * @returns (string) the string with the specific portion anonymized
      */
-    replaceData(text: string): string {
+    censorData(text: string): string {
         let beforeText = text;
         
         if (this.extensionInfo.scanUsingNumericPivot) {

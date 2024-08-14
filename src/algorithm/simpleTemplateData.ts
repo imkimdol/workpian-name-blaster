@@ -41,7 +41,7 @@ class SimpleTemplateDataAlgorithmWorkday extends SimpleTemplateDataAlgorithm {
 
         const regexWD = /^([\S\-]+\s+)+\(\d{8}\).*$/;
             if (value && regexWD.test(value)) {
-                node.nodeValue = this.helper.replaceData(value);
+                node.nodeValue = this.helper.censorData(value);
         };
     };
 };
@@ -54,13 +54,13 @@ class SimpleTemplateDataAlgorithmAppian extends SimpleTemplateDataAlgorithm {
         const regexSID = /^\(\d{8}\)$/;
 
         if (value && regexBar.test(value)) {
-            node.nodeValue = this.helper.replaceData(value);
+            node.nodeValue = this.helper.censorData(value);
         } else if (value && regexSID.test(value)) {
             const parentNode = node.parentElement?.previousSibling?.previousSibling;
             if (parentNode && parentNode.nodeType === Node.TEXT_NODE) {
                 const parentValue = parentNode.nodeValue;
                 if (parentValue) {
-                    parentNode.nodeValue = this.helper.replaceData(parentValue);
+                    parentNode.nodeValue = this.helper.censorData(parentValue);
                 }
             }
         }

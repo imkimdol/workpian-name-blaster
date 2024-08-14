@@ -16,7 +16,7 @@ class SetupHelper {
         this.algorithmHelper = algorithmHelper;
 
         this.addListener();
-        this.setReplacementLoop();
+        this.setCensorLoop();
     };
 
     /**
@@ -60,7 +60,7 @@ class SetupHelper {
     /**
      * Function to anonymize every defined amount of time (2 seconds).
      */
-    private setReplacementLoop() {
+    private setCensorLoop() {
         setInterval(() => {if (this.isBlastin) this.censorData();}, this.loopInterval);
     }
 };

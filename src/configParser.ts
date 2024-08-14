@@ -1,16 +1,17 @@
 export type Config = {
-    enableTableReplacement: boolean,
-    enableListReplacement: boolean,
-    enableSimpleTemplateReplacement: boolean,
-
-    flaggedNameLabels: string[],
-    flaggedOtherLabels: string[],
+    enableTableAlgorithm: boolean,
+    enableListAlgorithm: boolean,
+    enableSimpleTemplateAlgorithm: boolean,
 
     scanUsingNumericPivot: boolean,
     splitBeforeNumericPivotWorkday: boolean,
     splitBeforeNumericPivotAppian: boolean,
+
     scanUsingColonPivot: boolean,
     splitBeforeColonPivot: boolean
+
+    flaggedNameLabels: string[],
+    flaggedOtherLabels: string[]
 };
 
 async function fetchConfigFile(): Promise<Config> {

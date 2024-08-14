@@ -30,7 +30,7 @@ abstract class ListDataAlgorithm implements Algorithm {
         
         if (bioType) children.forEach((c, index) => {
             if (index === 0) return;
-            this.helper.replaceNodeText(c, bioType);
+            this.helper.censorNodeText(c, bioType);
         });
     }
 

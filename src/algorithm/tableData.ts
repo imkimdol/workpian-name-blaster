@@ -84,7 +84,7 @@ abstract class TableDataAlgorithm implements Algorithm {
     private scanBodyRow(row: HTMLTableRowElement, isBioInfoColumn: BiographicType[]) {
         const cells = Array.from(row.cells);
         cells.forEach((cell, index) => {
-            if (isBioInfoColumn[index]) this.helper.replaceNodeText(cell, isBioInfoColumn[index]);
+            if (isBioInfoColumn[index]) this.helper.censorNodeText(cell, isBioInfoColumn[index]);
         });
     };
 };

@@ -1,7 +1,14 @@
 {
-  "enableTableReplacement": true,
-  "enableListReplacement": true,
-  "enableSimpleTemplateReplacement": true,
+  "enableTableAlgorithm": true,
+  "enableListAlgorithm": true,
+  "enableSimpleTemplateAlgorithm": true,
+
+  "scanUsingNumericPivot": true,
+  "splitBeforeNumericPivotWorkday": true,
+  "splitBeforeNumericPivotAppian": false,
+
+  "scanUsingColonPivot": true,
+  "splitBeforeColonPivot": false,
 
   "flaggedNameLabels": [
     "^(?!.*(Award|Cohort).*Name).*Name.*",
@@ -26,11 +33,5 @@
     "Social Insurance Number",
     "Sex",
     "Contact Information"
-  ],
-
-  "scanUsingNumericPivot": true,
-  "splitBeforeNumericPivotWorkday": true,
-  "splitBeforeNumericPivotAppian": false,
-  "scanUsingColonPivot": true,
-  "splitBeforeColonPivot": false
+  ]
 }
