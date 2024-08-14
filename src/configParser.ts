@@ -12,7 +12,6 @@ export type Config = {
     scanUsingColonPivot: boolean,
     splitBeforeColonPivot: boolean
 };
-export type SplitBeforeNumericPivotConfigName = "splitBeforeNumericPivotWorkday" | "splitBeforeNumericPivotAppian";
 
 async function fetchConfigFile(): Promise<Config> {
     const url = chrome.runtime.getURL("config.json");

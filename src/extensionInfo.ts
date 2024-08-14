@@ -1,4 +1,4 @@
-import type { Config, SplitBeforeNumericPivotConfigName } from "./configParser";
+import type { Config } from "./configParser";
 export type Algorithm = { name: AlgorithmName, filePath: string };
 export type AlgorithmName = "table" | "list" | "simpleTemplateName";
 export type Platform = "Workday" | "Appian";
@@ -31,19 +31,10 @@ export abstract class ExtensionInfo {
         this.scanUsingColonPivot = config.scanUsingColonPivot;
         this.splitBeforeColonPivot = config.splitBeforeColonPivot;
     };
-
+    
     abstract getPlatform(): Platform;
     abstract getAlgorithms(): Algorithm[];
-
-    getSplitBeforeNumericPivot(): boolean {
-        const dict: {[key in Platform]: SplitBeforeNumericPivotConfigName} = {
-            "Workday": "splitBeforeNumericPivotWorkday",
-            "Appian": "splitBeforeNumericPivotAppian"
-        };
-        const platformSpecificConfigName = dict[this.platform];
-
-        return this.config[platformSpecificConfigName];
-    };
+    abstract getSplitBeforeNumericPivot(): boolean;
 };
 class WorkdayExtensionInfo extends ExtensionInfo {
     getPlatform(): Platform {
@@ -59,6 +50,10 @@ class WorkdayExtensionInfo extends ExtensionInfo {
 
         return algorithms;
     };
+
+    getSplitBeforeNumericPivot(): boolean {
+        return this.config.splitBeforeNumericPivotWorkday;
+    }
 };
 class AppianExtensionInfo extends ExtensionInfo {
     getPlatform(): Platform {
@@ -74,6 +69,10 @@ class AppianExtensionInfo extends ExtensionInfo {
 
         return algorithms;
     };
+
+    getSplitBeforeNumericPivot(): boolean {
+        return this.config.splitBeforeNumericPivotAppian;
+    }
 };
 
 async function getExtensionInfo(): Promise<ExtensionInfo> {
