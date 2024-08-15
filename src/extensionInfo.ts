@@ -27,12 +27,8 @@ export abstract class ExtensionInfo {
     this.useColonDividerSubalgorithm = config.useColonDividerSubalgorithm;
     this.useTextBeforeColonDivider = config.useTextBeforeColonDivider;
 
-    this.flaggedNameExpressions = config.flaggedNameExpressions.map((l) =>
-      RegExp(l, "g"),
-    );
-    this.flaggedOtherExpressions = config.flaggedOtherExpressions.map((l) =>
-      RegExp(l, "g"),
-    );
+    this.flaggedNameExpressions = config.flaggedNameExpressions.map((l) => RegExp(l));
+    this.flaggedOtherExpressions = config.flaggedOtherExpressions.map((l) => RegExp(l));
   }
 
   abstract getPlatform(): Platform;

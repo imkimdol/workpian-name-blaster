@@ -26,11 +26,13 @@ export class AlgorithmHelper {
    * @returns `DataType` of the matching expression, if one exists. Returns `DataType.NonBiographic` otherwise.
    */
   checkForFlaggedText(text: string): DataType {
-    for (const regex of this.extensionInfo.flaggedNameExpressions) {
-      if (regex.test(text)) return DataType.Name;
+    for (const r of this.extensionInfo.flaggedNameExpressions) {
+      const regexGlobal = new RegExp(r, "g");
+      if (regexGlobal.test(text)) return DataType.Name;
     }
-    for (const regex of this.extensionInfo.flaggedOtherExpressions) {
-      if (regex.test(text)) return DataType.Other;
+    for (const r of this.extensionInfo.flaggedOtherExpressions) {
+      const regexGlobal = new RegExp(r, "g");
+      if (regexGlobal.test(text)) return DataType.Other;
     }
     return DataType.NonBiographic;
   }
