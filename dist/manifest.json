@@ -14,13 +14,19 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*.myworkday.com/ubc*", "https://*.appiancloud.com/*"],
+      "matches": [
+        "https://*.myworkday.com/ubc*",
+        "https://*.appiancloud.com/*"
+      ],
       "js": ["contentScript.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "matches": ["https://*.myworkday.com/*", "https://*.appiancloud.com/*"],
+      "matches": [
+        "https://*.myworkday.com/ubc*",
+        "https://*.appiancloud.com/*"
+      ],
       "resources": [
         "config.json",
         "configParser.js",

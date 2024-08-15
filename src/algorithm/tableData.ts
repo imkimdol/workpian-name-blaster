@@ -1,160 +1,171 @@
-import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
-import type { DataType, AlgorithmHelper } from './helper';
+import type { Algorithm, AlgorithmInstantiatorFunction } from "./algorithm";
+import type { DataType, AlgorithmHelper } from "./helper";
 import type { ExtensionInfo } from "../extensionInfo";
 
 /**
  * An algorithm used for censoring data in tables.
- * 
+ *
  * Table columns with a head that matches any expression in `this.extensionInfo` is considered sensitive.
  */
 abstract class TableDataAlgorithm implements Algorithm {
-    extensionInfo: ExtensionInfo;
-    helper: AlgorithmHelper;
+  extensionInfo: ExtensionInfo;
+  helper: AlgorithmHelper;
 
-    constructor(extensionInfo: ExtensionInfo, algorithmHelper: AlgorithmHelper) {
-        this.extensionInfo = extensionInfo;
-        this.helper = algorithmHelper;
-    };
+  constructor(extensionInfo: ExtensionInfo, algorithmHelper: AlgorithmHelper) {
+    this.extensionInfo = extensionInfo;
+    this.helper = algorithmHelper;
+  }
 
-    censorSensitiveData() {
-        this.scanTables();
-    };
-    
-    /**
-     * Retrieves tables from the document and censors sensitive data.
-     */
-    private scanTables() {
-        const tables = Array.from(document.getElementsByTagName("table"));
-        tables.forEach(t => this.scanTable(t));
+  censorSensitiveData() {
+    this.scanTables();
+  }
+
+  /**
+   * Retrieves tables from the document and censors sensitive data.
+   */
+  private scanTables() {
+    const tables = Array.from(document.getElementsByTagName("table"));
+    tables.forEach((t) => this.scanTable(t));
+  }
+
+  /**
+   * Scans the provided table and censors sensitive data.
+   * @param table The table to scan
+   */
+  private scanTable(table: HTMLTableElement) {
+    const head = table.tHead;
+    if (!head) return;
+    const indices = this.scanHead(head);
+
+    const bodies = Array.from(table.tBodies);
+    bodies.forEach((b) => this.scanBody(b, indices));
+  }
+
+  /**
+   * Scans the table head for values that match flagged expressions.
+   * @param head
+   * @returns `DataType`s for the columns in the table, in order. (e.g. returnedValue[0] contains the data type for the first column, returnedValue[1] the second, etc.)
+   */
+  private scanHead(head: HTMLTableSectionElement): DataType[] {
+    const columnDataTypes: DataType[] = [];
+    const groupColumnPointers: number[] = [];
+    const rows = Array.from(head.rows);
+
+    rows.forEach((r) => {
+      const cells = Array.from(r.cells);
+      cells.forEach((c) =>
+        this.checkHeadRowCell(c, columnDataTypes, groupColumnPointers),
+      );
+    });
+
+    this.populateGroupColumnInfo(columnDataTypes, groupColumnPointers);
+
+    return columnDataTypes;
+  }
+
+  /**
+   * Checks if the given cell's value matches any flagged expressions.
+   *
+   * Appends the `DataType` of the matching expression to `columnDataTypes`, if one exists. Appends `DataType.NonBiographic` otherwise.
+   *
+   * If the cell is a group name cell, appends dummy values to `columnDataTypes` and adds pointers to positions of dummy values.
+   * The number of dummy values and pointers are equal to the length of the column group.
+   *
+   * @param cell Cell to check
+   * @param columnDataTypes Array to push `DataType` to.
+   * @param groupColumnPointers Array to push pointers to.
+   */
+  private checkHeadRowCell(
+    cell: HTMLTableCellElement,
+    columnDataTypes: DataType[],
+    groupColumnPointers: number[],
+  ) {
+    const scope = cell.getAttribute("scope");
+    if (!scope) {
+      const className = cell.className;
+      if (className === "PagingGridLayout---checkbox") {
+        columnDataTypes.push(this.helper.checkForFlaggedText(cell.innerText));
+      }
+      return;
     }
 
-    /**
-     * Scans the provided table and censors sensitive data.
-     * @param table The table to scan
-     */
-    private scanTable(table: HTMLTableElement) {
-        const head = table.tHead;
-        if (!head) return;
-        const indices = this.scanHead(head);
-    
-        const bodies = Array.from(table.tBodies);
-        bodies.forEach(b => this.scanBody(b, indices));
-    };
-
-    /**
-     * Scans the table head for values that match flagged expressions.
-     * @param head
-     * @returns `DataType`s for the columns in the table, in order. (e.g. returnedValue[0] contains the data type for the first column, returnedValue[1] the second, etc.)
-     */
-    private scanHead(head: HTMLTableSectionElement): DataType[] {
-        const columnDataTypes: DataType[] = [];
-        const groupColumnPointers: number[] = [];
-        const rows = Array.from(head.rows);
-    
-        rows.forEach(r => {
-            const cells = Array.from(r.cells);
-            cells.forEach(c => this.checkHeadRowCell(c, columnDataTypes, groupColumnPointers))
-        });
-    
-        this.populateGroupColumnInfo(columnDataTypes, groupColumnPointers);
-        
-        return columnDataTypes;
-    };
-    
-    /**
-     * Checks if the given cell's value matches any flagged expressions.
-     * 
-     * Appends the `DataType` of the matching expression to `columnDataTypes`, if one exists. Appends `DataType.NonBiographic` otherwise.
-     * 
-     * If the cell is a group name cell, appends dummy values to `columnDataTypes` and adds pointers to positions of dummy values.
-     * The number of dummy values and pointers are equal to the length of the column group.
-     * 
-     * @param cell Cell to check
-     * @param columnDataTypes Array to push `DataType` to.
-     * @param groupColumnPointers Array to push pointers to.
-     */
-    private checkHeadRowCell(cell: HTMLTableCellElement, columnDataTypes: DataType[], groupColumnPointers: number[]) {
-        const scope = cell.getAttribute("scope");
-        if (!scope) {
-            const className = cell.className;
-            if (className === "PagingGridLayout---checkbox") {
-                columnDataTypes.push(this.helper.checkForFlaggedText(cell.innerText));
-            }
-            return;
-        };
-    
-        if (scope !== "col") {
-            /*
+    if (scope !== "col") {
+      /*
                 ──────▄▀▄─────▄▀▄
                 ─────▄█░░▀▀▀▀▀░░█▄
                 ─▄▄──█░░░░░░░░░░░█──▄▄
                 █▄▄█─█░░▀░░┬░░▀░░█─█▄▄█
             */
-            
-            const spanString = cell.getAttribute("colSpan");
-            if (!spanString) return;
-            const span = parseInt(spanString);
-    
-            for (let i=0; i<span; i++) {
-                columnDataTypes.push(0);
-                groupColumnPointers.push(columnDataTypes.length-1);
-            }
-            return;
-        }
-    
-        columnDataTypes.push(this.helper.checkForFlaggedText(cell.innerText));
-    };
 
-    /**
-     * Replaces dummy values generated by `this.checkHeadRowcell`.
-     * 
-     * This function assumes that the trailing values of `columnDataTypes` are the replacement values.
-     * This function assumes that the trailing values are in order.
-     * 
-     * @param columnDataTypes Array that contains replacement values.
-     * @param groupColumnPointers Array that contains pointers to dummy values.
-     */
-    private populateGroupColumnInfo(columnDataTypes: DataType[], groupColumnPointers: number[]) {
-        for (let i=0; i<groupColumnPointers.length; i++) {
-            const pointer = groupColumnPointers[i];
-            const sourceIndex = columnDataTypes.length - groupColumnPointers.length + i;
-            columnDataTypes[pointer] = columnDataTypes[sourceIndex];
-        }
-    };
-    
-    /**
-     * Scans the provided table body and censors sensitive data.
-     * @param body The body to scan
-     * @param columnDataTypes Array containing data types for every column
-     */
-    private scanBody(body: HTMLTableSectionElement, columnDataTypes: DataType[]) {
-        const rows = Array.from(body.rows);
-        rows.forEach(r => this.scanBodyRow(r, columnDataTypes));
-    };
-    /**
-     * Scans the provided table row and censors sensitive data.
-     * @param row The row to scan
-     * @param columnDataTypes Array containing data types for every column
-     */
-    private scanBodyRow(row: HTMLTableRowElement, columnDataTypes: DataType[]) {
-        const cells = Array.from(row.cells);
-        cells.forEach((cell, index) => {
-            if (columnDataTypes[index]) this.helper.censorNodeText(cell, columnDataTypes[index]);
-        });
-    };
-};
-class TableDataAlgorithmWorkday extends TableDataAlgorithm {};
-class TableDataAlgorithmAppian extends TableDataAlgorithm {};
+      const spanString = cell.getAttribute("colSpan");
+      if (!spanString) return;
+      const span = parseInt(spanString);
+
+      for (let i = 0; i < span; i++) {
+        columnDataTypes.push(0);
+        groupColumnPointers.push(columnDataTypes.length - 1);
+      }
+      return;
+    }
+
+    columnDataTypes.push(this.helper.checkForFlaggedText(cell.innerText));
+  }
+
+  /**
+   * Replaces dummy values generated by `this.checkHeadRowcell`.
+   *
+   * This function assumes that the trailing values of `columnDataTypes` are the replacement values.
+   * This function assumes that the trailing values are in order.
+   *
+   * @param columnDataTypes Array that contains replacement values.
+   * @param groupColumnPointers Array that contains pointers to dummy values.
+   */
+  private populateGroupColumnInfo(
+    columnDataTypes: DataType[],
+    groupColumnPointers: number[],
+  ) {
+    for (let i = 0; i < groupColumnPointers.length; i++) {
+      const pointer = groupColumnPointers[i];
+      const sourceIndex =
+        columnDataTypes.length - groupColumnPointers.length + i;
+      columnDataTypes[pointer] = columnDataTypes[sourceIndex];
+    }
+  }
+
+  /**
+   * Scans the provided table body and censors sensitive data.
+   * @param body The body to scan
+   * @param columnDataTypes Array containing data types for every column
+   */
+  private scanBody(body: HTMLTableSectionElement, columnDataTypes: DataType[]) {
+    const rows = Array.from(body.rows);
+    rows.forEach((r) => this.scanBodyRow(r, columnDataTypes));
+  }
+  /**
+   * Scans the provided table row and censors sensitive data.
+   * @param row The row to scan
+   * @param columnDataTypes Array containing data types for every column
+   */
+  private scanBodyRow(row: HTMLTableRowElement, columnDataTypes: DataType[]) {
+    const cells = Array.from(row.cells);
+    cells.forEach((cell, index) => {
+      if (columnDataTypes[index])
+        this.helper.censorNodeText(cell, columnDataTypes[index]);
+    });
+  }
+}
+class TableDataAlgorithmWorkday extends TableDataAlgorithm {}
+class TableDataAlgorithmAppian extends TableDataAlgorithm {}
 
 /**
  * Creates an instance of `TableDataAlgorithm` that matches the current platform.
  * @returns Instantiated class.
  */
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
-    if (i.platform === "Workday") {
-        return new TableDataAlgorithmWorkday(i, h);
-    } else {
-        return new TableDataAlgorithmAppian(i, h);
-    }
+  if (i.platform === "Workday") {
+    return new TableDataAlgorithmWorkday(i, h);
+  } else {
+    return new TableDataAlgorithmAppian(i, h);
+  }
 };
 export default getAlgorithm;

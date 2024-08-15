@@ -1,13 +1,13 @@
 {
-	"extends": "./node_modules/@tsconfig/node18/tsconfig.json",
-	"compilerOptions": {
-		"module": "ESNext",
-		"moduleResolution": "Classic",
-		"lib": ["DOM", "ESNext"],
-		"rootDir": "src",
-		"outDir": "dist",
-		"allowJs": true,
-		"noImplicitAny": true,
-		"removeComments": false,
-	}
+  "extends": "./node_modules/@tsconfig/node18/tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Classic",
+    "lib": ["DOM", "ESNext"],
+    "rootDir": "src",
+    "outDir": "dist",
+    "allowJs": true,
+    "noImplicitAny": true,
+    "removeComments": false
+  }
 }

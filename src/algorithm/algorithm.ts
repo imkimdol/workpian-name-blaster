@@ -7,16 +7,19 @@ import type { AlgorithmHelper } from "./helper";
  * The base interface for all algorithm classes.
  */
 export interface Algorithm {
-    extensionInfo: ExtensionInfo;
-    helper: AlgorithmHelper;
-    
-    /**
-     * The base function used to run the algorithm.
-     */
-    censorSensitiveData(): void;
-};
+  extensionInfo: ExtensionInfo;
+  helper: AlgorithmHelper;
+
+  /**
+   * The base function used to run the algorithm.
+   */
+  censorSensitiveData(): void;
+}
 /**
  * Functions that create an instance of `Algorithm` that matches the current platform.
  * @returns Instantiated class
  */
-export type AlgorithmInstantiatorFunction = (extensionInfo: ExtensionInfo, helper: AlgorithmHelper) => Algorithm;
+export type AlgorithmInstantiatorFunction = (
+  extensionInfo: ExtensionInfo,
+  helper: AlgorithmHelper,
+) => Algorithm;
