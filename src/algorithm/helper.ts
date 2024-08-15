@@ -63,9 +63,9 @@ export class AlgorithmHelper {
      * 
      * These subalgorithms are controlled by values in `this.extensionInfo`:
      * - `useNumericDividerSubalgorithm`: If true, the numeric divider subalgorithm will be used.
-     * - `useTextBeforeNumericDivider`:   If true, text before the numeric divider will be censored. After if false.
+     * - `useTextBeforeNumericDivider`:   If true, text before the numeric divider will be censored. If false, censors after divider.
      * - `useColonDividerSubalgorithm`:   If true, the colon divider subalgorithm will be used.
-     * - `useTextBeforeColonDivider`:     If true, text before the colon divider will be censored. After if false.
+     * - `useTextBeforeColonDivider`:     If true, text before the colon divider will be censored. If false, censors after divider.
      * 
      * @param text String to be censored
      * @returns Censored string
