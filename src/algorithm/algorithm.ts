@@ -13,7 +13,7 @@ export interface Algorithm {
     /**
      * The base function used to run the algorithm.
      */
-    censorData(): void;
+    censorSensitiveData(): void;
 };
 /**
  * Functions that create an instance of `Algorithm` that matches the current platform.

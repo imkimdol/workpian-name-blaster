@@ -3,15 +3,15 @@ export type Config = {
     enableListAlgorithm: boolean,
     enableSimpleTemplateAlgorithm: boolean,
 
-    scanUsingNumericPivot: boolean,
-    splitBeforeNumericPivotWorkday: boolean,
-    splitBeforeNumericPivotAppian: boolean,
+    useNumericDividerSubalgorithm: boolean,
+    useTextBeforeNumericDividerWorkday: boolean,
+    useTextBeforeNumericDividerAppian: boolean,
 
-    scanUsingColonPivot: boolean,
-    splitBeforeColonPivot: boolean
+    useColonDividerSubalgorithm: boolean,
+    useTextBeforeColonDivider: boolean
 
-    flaggedNameLabels: string[],
-    flaggedOtherLabels: string[]
+    flaggedNameExpressions: string[],
+    flaggedOtherExpressions: string[]
 };
 
 /**

@@ -1,9 +1,7 @@
 import type { ExtensionInfo } from "../extensionInfo";
 /**
  * - `NonBiographic`: Not censored.
- * 
  * - `Name`: Alpha characters are censored.
- * 
  * - `Other`: All chraracter are censored.
  */
 export enum DataType {NonBiographic, Name, Other};
@@ -19,15 +17,15 @@ export class AlgorithmHelper {
     }
 
     /**
-     * Checks if the provided text matches any of user-provided data type flags.
+     * Checks if the provided string matches an expression in `this.extensionInfo`.
      * @param text String to check
-     * @returns `DataType` of the string, if a match is found
+     * @returns `DataType` of the matching expression, if one exists. Returns `DataType.NonBiographic` otherwise.
      */
     checkForFlaggedText(text: string): DataType {
-        for (const regex of this.extensionInfo.flaggedNameLabels) {
+        for (const regex of this.extensionInfo.flaggedNameExpressions) {
             if (regex.test(text)) return DataType.Name;
         }
-        for (const regex of this.extensionInfo.flaggedOtherLabels) {
+        for (const regex of this.extensionInfo.flaggedOtherExpressions) {
             if (regex.test(text)) return DataType.Other;
         }
         return DataType.NonBiographic;
@@ -35,12 +33,12 @@ export class AlgorithmHelper {
 
     /**
      * Recursive function that traverses all nodes in a node tree.
-     * If the current node is a leaf, censor the node according to the `DataType`.
+     * If the current node is a leaf, censor the node according to provided `DataType`.
      * 
      * This function assumes that all children of the current node has the same `DataType`.
      * 
      * @param node Current node in traversal
-     * @param dataType Type of current node
+     * @param dataType Data type of `node`
      */
     censorNodeText(node: Node, dataType: DataType) {
         const children = node.childNodes;
@@ -48,7 +46,7 @@ export class AlgorithmHelper {
 
         if (children.length === 0 && value && node.nodeType === Node.TEXT_NODE) {
             if (dataType === DataType.Name) {
-                node.nodeValue = this.censorData(value);
+                node.nodeValue = this.censorNameData(value);
             } else {
                 node.nodeValue = this.replaceTextWithDashes(value);
             }
@@ -59,27 +57,31 @@ export class AlgorithmHelper {
     }
 
     /**
-     * Censors data according to the user-provided configuration.
-     * - `scanUsingNumericPivot`: if true, strings will be split by any number in the string
-     * - `splitBeforeNumericPivot`: if `scanUsingNumericPivot` is true, this determines which half of the string to keep at the number. Before if true, after if false
-     * - `scanUsingColonPivot`: if true, strings will be split by any colon (:) in the string
-     * - `splitBeforeColonPivot`: if `scanUsingColonPivot` is true, this determines which half of the string to use. Before if true, after if false.
+     * Censors names from the provided string. This function uses subalgorithms to isolate the name from the string.
+     * - Numeric divider subalgorithm: Only censors text before the first numeric character or after the last numeric character.
+     * - Colon divider subalgorithm:   Only censors text before the first colon or after the last colon.
+     * 
+     * These subalgorithms are controlled by values in `this.extensionInfo`:
+     * - `useNumericDividerSubalgorithm`: If true, the numeric divider subalgorithm will be used.
+     * - `useTextBeforeNumericDivider`:   If true, text before the numeric divider will be censored. After if false.
+     * - `useColonDividerSubalgorithm`:   If true, the colon divider subalgorithm will be used.
+     * - `useTextBeforeColonDivider`:     If true, text before the colon divider will be censored. After if false.
      * 
      * @param text String to be censored
      * @returns Censored string
      */
-    censorData(text: string): string {
+    censorNameData(text: string): string {
         let beforeText = text;
         
-        if (this.extensionInfo.scanUsingNumericPivot) {
+        if (this.extensionInfo.useNumericDividerSubalgorithm) {
             const split = beforeText.split(/\d/);
-            if (this.extensionInfo.splitBeforeNumericPivot) beforeText = split[0];
+            if (this.extensionInfo.useTextBeforeNumericDivider) beforeText = split[0];
             else if (beforeText.length > 1) beforeText = split[split.length - 1];
         }
 
-        if (this.extensionInfo.scanUsingColonPivot) {
+        if (this.extensionInfo.useColonDividerSubalgorithm) {
             const split = beforeText.split(":");
-            if (this.extensionInfo.splitBeforeColonPivot) beforeText = split[0];       
+            if (this.extensionInfo.useTextBeforeColonDivider) beforeText = split[0];       
             else if (beforeText.length > 1) beforeText = split[split.length - 1];
         }
 

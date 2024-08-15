@@ -9,25 +9,25 @@ export abstract class ExtensionInfo {
     platform: Platform;
     algorithmPaths: string[];
 
-    flaggedNameLabels: RegExp[];
-    flaggedOtherLabels: RegExp[];
+    useNumericDividerSubalgorithm: boolean;
+    useTextBeforeNumericDivider: boolean;
+    useColonDividerSubalgorithm: boolean;
+    useTextBeforeColonDivider: boolean;
 
-    scanUsingNumericPivot: boolean;
-    splitBeforeNumericPivot: boolean;
-    scanUsingColonPivot: boolean;
-    splitBeforeColonPivot: boolean;
+    flaggedNameExpressions: RegExp[];
+    flaggedOtherExpressions: RegExp[];
 
     constructor(config: Config) {
         this.platform = this.getPlatform();
         this.algorithmPaths = this.getAlgorithmPaths(config);
 
-        this.flaggedNameLabels = config.flaggedNameLabels.map(l => RegExp(l, 'g'));
-        this.flaggedOtherLabels = config.flaggedOtherLabels.map(l => RegExp(l, 'g'));;
+        this.useNumericDividerSubalgorithm = config.useNumericDividerSubalgorithm;
+        this.useTextBeforeNumericDivider = this.getUseTextBeforeNumericDivider(config);
+        this.useColonDividerSubalgorithm = config.useColonDividerSubalgorithm;
+        this.useTextBeforeColonDivider = config.useTextBeforeColonDivider;
 
-        this.scanUsingNumericPivot = config.scanUsingNumericPivot;
-        this.splitBeforeNumericPivot = this.getSplitBeforeNumericPivot(config);
-        this.scanUsingColonPivot = config.scanUsingColonPivot;
-        this.splitBeforeColonPivot = config.splitBeforeColonPivot;
+        this.flaggedNameExpressions = config.flaggedNameExpressions.map(l => RegExp(l, 'g'));
+        this.flaggedOtherExpressions = config.flaggedOtherExpressions.map(l => RegExp(l, 'g'));
     };
     
     abstract getPlatform(): Platform;
@@ -46,7 +46,7 @@ export abstract class ExtensionInfo {
      * 
      * @param config Parsed config data
      */
-    abstract getSplitBeforeNumericPivot(config: Config): boolean;
+    abstract getUseTextBeforeNumericDivider(config: Config): boolean;
 };
 class WorkdayExtensionInfo extends ExtensionInfo {
     getPlatform(): Platform {
@@ -63,8 +63,8 @@ class WorkdayExtensionInfo extends ExtensionInfo {
         return paths;
     };
 
-    getSplitBeforeNumericPivot(config: Config): boolean {
-        return config.splitBeforeNumericPivotWorkday;
+    getUseTextBeforeNumericDivider(config: Config): boolean {
+        return config.useTextBeforeNumericDividerWorkday;
     }
 };
 class AppianExtensionInfo extends ExtensionInfo {
@@ -82,8 +82,8 @@ class AppianExtensionInfo extends ExtensionInfo {
         return algorithms;
     };
 
-    getSplitBeforeNumericPivot(config: Config): boolean {
-        return config.splitBeforeNumericPivotAppian;
+    getUseTextBeforeNumericDivider(config: Config): boolean {
+        return config.useTextBeforeNumericDividerAppian;
     }
 };
 

@@ -6,7 +6,9 @@ import type { ExtensionInfo } from "../extensionInfo";
  * An algorithm used for censoring data that matches a certain template.
  * (e.g. "`John Doe (12345678)`" or "`87654321 | Jane Doe`")
  * 
- * Uses recursive node traversal on the entire DOM to find node values that match the template.
+ * Data that matches the template is considered sensitive.
+ * 
+ * Uses recursive node traversal on the document body to find nodes that match the template.
  */
 abstract class SimpleTemplateDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
@@ -17,7 +19,7 @@ abstract class SimpleTemplateDataAlgorithm implements Algorithm {
         this.helper = algorithmHelper;
     };
 
-    censorData() {
+    censorSensitiveData() {
         this.traverseNode();
     };
 
@@ -38,7 +40,7 @@ abstract class SimpleTemplateDataAlgorithm implements Algorithm {
         children.forEach(c => this.traverseNode(c));
     }
     /**
-     * Checks the given leaf node's value. If the value matches the template, censors it.
+     * Checks the given leaf node's value. Censors the value if it matches the template.
      * @param node Leaf node
      */
     abstract checkLeafNode(node: Node): void
@@ -50,7 +52,7 @@ class SimpleTemplateDataAlgorithmWorkday extends SimpleTemplateDataAlgorithm {
 
         const regexWD = /^([\S\-]+\s+)+\(\d{8}\).*$/;
             if (value && regexWD.test(value)) {
-                node.nodeValue = this.helper.censorData(value);
+                node.nodeValue = this.helper.censorNameData(value);
         };
     };
 };
@@ -63,13 +65,13 @@ class SimpleTemplateDataAlgorithmAppian extends SimpleTemplateDataAlgorithm {
         const regexSID = /^\(\d{8}\)$/;
 
         if (value && regexBar.test(value)) {
-            node.nodeValue = this.helper.censorData(value);
+            node.nodeValue = this.helper.censorNameData(value);
         } else if (value && regexSID.test(value)) {
             const parentNode = node.parentElement?.previousSibling?.previousSibling;
             if (parentNode && parentNode.nodeType === Node.TEXT_NODE) {
                 const parentValue = parentNode.nodeValue;
                 if (parentValue) {
-                    parentNode.nodeValue = this.helper.censorData(parentValue);
+                    parentNode.nodeValue = this.helper.censorNameData(parentValue);
                 }
             }
         }

@@ -43,7 +43,7 @@ class SetupHelper {
      */
     private async runAlgorithms() {
         if (this.algorithms.length === 0) await this.importAlgorithms();
-        this.algorithms.forEach(a => a.censorData());
+        this.algorithms.forEach(a => a.censorSensitiveData());
     }
     
     /**

@@ -3,19 +3,19 @@
   "enableListAlgorithm": true,
   "enableSimpleTemplateAlgorithm": true,
 
-  "scanUsingNumericPivot": true,
-  "splitBeforeNumericPivotWorkday": true,
-  "splitBeforeNumericPivotAppian": false,
+  "useNumericDividerSubalgorithm": true,
+  "useTextBeforeNumericDividerWorkday": true,
+  "useTextBeforeNumericDividerAppian": false,
 
-  "scanUsingColonPivot": true,
-  "splitBeforeColonPivot": false,
+  "useColonDividerSubalgorithm": true,
+  "useTextBeforeColonDivider": false,
 
-  "flaggedNameLabels": [
+  "flaggedNameExpressions": [
     "^(?!.*(Award|Cohort).*Name).*Name.*",
     "^Student$",
     "^Academic Record$"
   ],
-  "flaggedOtherLabels": [
+  "flaggedOtherExpressions": [
     "Date of Birth",
     "Age",
     "Citizenship Status",

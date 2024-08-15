@@ -14,7 +14,7 @@ abstract class TableDataAlgorithm implements Algorithm {
         this.helper = algorithmHelper;
     };
 
-    censorData() {
+    censorSensitiveData() {
         const tables = Array.from(document.getElementsByTagName("table"));
         tables.forEach(t => this.scanTable(t));
     };
