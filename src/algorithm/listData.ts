@@ -57,7 +57,7 @@ abstract class ListDataAlgorithm implements Algorithm {
         }
         
         const value = node.nodeValue;
-        if (node.nodeType === Node.TEXT_NODE && value) return this.helper.checkLabelForFlaggedText(value);
+        if (node.nodeType === Node.TEXT_NODE && value) return this.helper.checkForFlaggedText(value);
 
         return 0;
     }

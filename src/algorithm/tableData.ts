@@ -46,7 +46,7 @@ abstract class TableDataAlgorithm implements Algorithm {
         if (!scope) {
             const className = cell.className;
             if (className === "PagingGridLayout---checkbox") {
-                isBioInfoColumn.push(this.helper.checkLabelForFlaggedText(cell.innerText));
+                isBioInfoColumn.push(this.helper.checkForFlaggedText(cell.innerText));
             }
             return;
         };
@@ -70,7 +70,7 @@ abstract class TableDataAlgorithm implements Algorithm {
             return;
         }
     
-        isBioInfoColumn.push(this.helper.checkLabelForFlaggedText(cell.innerText));
+        isBioInfoColumn.push(this.helper.checkForFlaggedText(cell.innerText));
     };
     private populateGroupColumnInfo(isBioInfoColumn: DataType[], groupColumnPointers: number[]) {
         for (let i=0; i<groupColumnPointers.length; i++) {

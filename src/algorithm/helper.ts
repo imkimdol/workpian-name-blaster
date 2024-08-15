@@ -19,16 +19,16 @@ export class AlgorithmHelper {
     }
 
     /**
-     * Checks if the provided label matches any of user-provided data type flags.
-     * @param label Label to check
+     * Checks if the provided text matches any of user-provided data type flags.
+     * @param text String to check
      * @returns `DataType` of the string, if a match is found
      */
-    checkLabelForFlaggedText(label: string): DataType {
+    checkForFlaggedText(text: string): DataType {
         for (const regex of this.extensionInfo.flaggedNameLabels) {
-            if (regex.test(label)) return DataType.Name;
+            if (regex.test(text)) return DataType.Name;
         }
         for (const regex of this.extensionInfo.flaggedOtherLabels) {
-            if (regex.test(label)) return DataType.Other;
+            if (regex.test(text)) return DataType.Other;
         }
         return DataType.NonBiographic;
     };
