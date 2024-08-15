@@ -26,7 +26,7 @@ class SetupHelper {
   }
 
   /**
-   * Dynamically imports and instantiates algorithms specified in `this.extensionInfo`.
+   * Dynamically imports and instantiates algorithms specified in `extensionInfo`.
    */
   private async importAlgorithms() {
     const helperModule = await import(

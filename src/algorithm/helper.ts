@@ -21,7 +21,7 @@ export class AlgorithmHelper {
   }
 
   /**
-   * Checks if the provided string matches an expression in `this.extensionInfo`.
+   * Checks if the provided string matches an expression in `extensionInfo`.
    * @param text String to check
    * @returns `DataType` of the matching expression, if one exists. Returns `DataType.NonBiographic` otherwise.
    */
@@ -65,7 +65,7 @@ export class AlgorithmHelper {
    * - Numeric divider subalgorithm: Only censors text before the first numeric character or after the last numeric character.
    * - Colon divider subalgorithm:   Only censors text before the first colon or after the last colon.
    *
-   * These subalgorithms are controlled by values in `this.extensionInfo`:
+   * These subalgorithms are controlled by values in `extensionInfo`:
    * - `useNumericDividerSubalgorithm`: If true, the numeric divider subalgorithm will be used.
    * - `useTextBeforeNumericDivider`:   If true, text before the numeric divider will be censored. If false, censors after divider.
    * - `useColonDividerSubalgorithm`:   If true, the colon divider subalgorithm will be used.

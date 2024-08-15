@@ -45,9 +45,9 @@ export abstract class ExtensionInfo {
   abstract getAlgorithmPaths(config: Config): string[];
 
   /**
-   * Returns the splitBeforeNumericPivot value that matches the current platform.
+   * Returns the useTextBeforeNumericDivider value that matches the current platform.
    *
-   * e.g. WorkdayExtensionInfo returns config.splitBeforeNumericPivotWorkday.
+   * e.g. WorkdayExtensionInfo returns config.useTextBeforeNumericDividerWorkday.
    *
    * @param config Parsed config data
    */

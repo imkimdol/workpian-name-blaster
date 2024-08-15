@@ -7,7 +7,7 @@ import type { ExtensionInfo } from "../extensionInfo";
  *
  * List items consist of two parts: label and data.
  *
- * Data with a label that matches any expression in `this.extensionInfo` is considered sensitive.
+ * Data with a label that matches any expression in `extensionInfo` is considered sensitive.
  */
 abstract class ListDataAlgorithm implements Algorithm {
   extensionInfo: ExtensionInfo;
