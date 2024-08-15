@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WorkPian Name Blaster",
-  "version": "0.9",
+  "version": "1.0.0",
   "description": "Censors biographical data in Workday and Appian LFSM.",
   "action": {
     "default_popup": "popup/popup.html"
