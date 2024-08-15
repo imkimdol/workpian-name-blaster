@@ -1,4 +1,7 @@
-export type Config = {
+/**
+ * The expected format for `config.json`.
+ */
+export interface Config {
     enableTableAlgorithm: boolean,
     enableListAlgorithm: boolean,
     enableSimpleTemplateAlgorithm: boolean,
