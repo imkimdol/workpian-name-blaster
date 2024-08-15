@@ -28,7 +28,7 @@ export class AlgorithmHelper {
             if (regex.test(label)) return DataType.Name;
         }
         for (const regex of this.extensionInfo.flaggedOtherLabels) {
-            if (regex.test(label)) return DataType.NonBiographic;
+            if (regex.test(label)) return DataType.Other;
         }
         return DataType.NonBiographic;
     };
