@@ -16,7 +16,7 @@ export type Config = {
 
 /**
  * Loads and reads config data from config.json.
- * @returns The parsed config data.
+ * @returns Parsed config data.
  */
 async function fetchConfigFile(): Promise<Config> {
     const url = chrome.runtime.getURL("config.json");

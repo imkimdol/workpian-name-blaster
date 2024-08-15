@@ -1,5 +1,5 @@
 import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
-import type { BiographicType, AlgorithmHelper } from './helper';
+import type { DataType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
 /**
@@ -14,7 +14,7 @@ abstract class TableDataAlgorithm implements Algorithm {
         this.helper = algorithmHelper;
     };
 
-    censorData(): void {
+    censorData() {
         const tables = Array.from(document.getElementsByTagName("table"));
         tables.forEach(t => this.scanTable(t));
     };
@@ -27,8 +27,8 @@ abstract class TableDataAlgorithm implements Algorithm {
         const bodies = Array.from(table.tBodies);
         bodies.forEach(b => this.scanBody(b, indices));
     };
-    private scanHead(head: HTMLTableSectionElement): BiographicType[] {
-        const isBioInfoColumn: BiographicType[] = [];
+    private scanHead(head: HTMLTableSectionElement): DataType[] {
+        const isBioInfoColumn: DataType[] = [];
         const groupColumnPointers: number[] = [];
         const rows = Array.from(head.rows);
     
@@ -41,12 +41,12 @@ abstract class TableDataAlgorithm implements Algorithm {
         
         return isBioInfoColumn;
     };
-    private scanHeadRowCell(cell: HTMLTableCellElement, isBioInfoColumn: BiographicType[], groupColumnPointers: number[]) {
+    private scanHeadRowCell(cell: HTMLTableCellElement, isBioInfoColumn: DataType[], groupColumnPointers: number[]) {
         const scope = cell.getAttribute("scope");
         if (!scope) {
             const className = cell.className;
             if (className === "PagingGridLayout---checkbox") {
-                isBioInfoColumn.push(this.helper.checkForFlaggedText(cell.innerText));
+                isBioInfoColumn.push(this.helper.checkLabelForFlaggedText(cell.innerText));
             }
             return;
         };
@@ -70,9 +70,9 @@ abstract class TableDataAlgorithm implements Algorithm {
             return;
         }
     
-        isBioInfoColumn.push(this.helper.checkForFlaggedText(cell.innerText));
+        isBioInfoColumn.push(this.helper.checkLabelForFlaggedText(cell.innerText));
     };
-    private populateGroupColumnInfo(isBioInfoColumn: BiographicType[], groupColumnPointers: number[]) {
+    private populateGroupColumnInfo(isBioInfoColumn: DataType[], groupColumnPointers: number[]) {
         for (let i=0; i<groupColumnPointers.length; i++) {
             const pointer = groupColumnPointers[i];
             const sourceIndex = isBioInfoColumn.length - groupColumnPointers.length + i;
@@ -80,11 +80,11 @@ abstract class TableDataAlgorithm implements Algorithm {
         }
     };
     
-    private scanBody(body: HTMLTableSectionElement, isBioInfoColumn: BiographicType[]) {
+    private scanBody(body: HTMLTableSectionElement, isBioInfoColumn: DataType[]) {
         const rows = Array.from(body.rows);
         rows.forEach(r => this.scanBodyRow(r, isBioInfoColumn));
     };
-    private scanBodyRow(row: HTMLTableRowElement, isBioInfoColumn: BiographicType[]) {
+    private scanBodyRow(row: HTMLTableRowElement, isBioInfoColumn: DataType[]) {
         const cells = Array.from(row.cells);
         cells.forEach((cell, index) => {
             if (isBioInfoColumn[index]) this.helper.censorNodeText(cell, isBioInfoColumn[index]);
@@ -96,7 +96,7 @@ class TableDataAlgorithmAppian extends TableDataAlgorithm {};
 
 /**
  * Creates an instance of `TableDataAlgorithm` that matches the current platform.
- * @returns The instantiated class.
+ * @returns Instantiated class.
  */
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
     if (i.platform === "Workday") {

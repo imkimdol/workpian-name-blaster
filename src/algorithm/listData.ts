@@ -1,5 +1,5 @@
 import type { Algorithm, AlgorithmInstantiatorFunction } from './algorithm';
-import type { BiographicType, AlgorithmHelper } from './helper';
+import type { DataType, AlgorithmHelper } from './helper';
 import type { ExtensionInfo } from "../extensionInfo";
 
 /**
@@ -14,19 +14,26 @@ abstract class ListDataAlgorithm implements Algorithm {
         this.helper = algorithmHelper;
     }
     
-    abstract censorData(): void;
+    censorData() {
+        this.scanListItems();
+    }
 
     /**
-     * Scans each list item to see if it matches a WD label/data pairing with sensitive data.
-     * @param element - the current HTML element
-     * @returns automatically returns if the list item has less than 2 elements or does not have a label under the config file.
+     * Retrieves list items from DOM and censors sensitive data.
      */
-    protected scanLI(element: Element) {
+    protected abstract scanListItems(): void;
+
+    /**
+     * Scans list item for and censors sensitive data. 
+     * 
+     * @param element Current element
+     */
+    protected scanListItem(element: Element) {
         const children = element.childNodes;
         if (children.length < 2) return;
 
-        const firstChild = children[0]; // Assume first child is label
-        const bioType = this.checkLabelForFlaggedText(firstChild);
+        const label = children[0]; // Assume first child is label
+        const bioType = this.checkLabelForFlaggedText(label);
         
         if (bioType) children.forEach((c, index) => {
             if (index === 0) return;
@@ -36,10 +43,10 @@ abstract class ListDataAlgorithm implements Algorithm {
 
     /**
      * Recursive function that verifies for each (assumed) WD label node, that it is a label present in the config.json file.
-     * @param node - the current HTML node (assume that it is a label)
-     * @returns `bioType` - true if a match for the label was found in the config.json, false otherwise
+     * @param node Current HTML node (assume that it is a label)
+     * @returns `true` if a match for the label was found in the config.json, `false` otherwise
      */
-    private checkLabelForFlaggedText(node: Node): BiographicType {
+    private checkLabelForFlaggedText(node: Node): DataType {
         // checks the children of the LABEL's div class. One of them will be the label displayed, but we aren't always sure which one
         const children = Array.from(node.childNodes);
         if (children.length > 0) {
@@ -50,27 +57,27 @@ abstract class ListDataAlgorithm implements Algorithm {
         }
         
         const value = node.nodeValue;
-        if (value && node.nodeType === Node.TEXT_NODE) return this.helper.checkForFlaggedText(value);
+        if (node.nodeType === Node.TEXT_NODE && value) return this.helper.checkLabelForFlaggedText(value);
 
         return 0;
     }
 };
 class ListDataAlgorithmWorkday extends ListDataAlgorithm {
-    censorData(): void {
-        const LIs = Array.from(document.getElementsByTagName("li"));
-        LIs.forEach(l => this.scanLI(l));
+    scanListItems(): void {
+        const listItems = Array.from(document.getElementsByTagName("li"));
+        listItems.forEach(i => this.scanListItem(i));
     };
 };
 class ListDataAlgorithmAppian extends ListDataAlgorithm {
-    censorData(): void {
+    scanListItems(): void {
         const Elements = Array.from(document.getElementsByClassName("SideBySideGroup---side_by_side"));
-        Elements.forEach(l => this.scanLI(l));
+        Elements.forEach(e => this.scanListItem(e));
     };
 };
 
 /**
  * Creates an instance of `ListDataAlgorithm` that matches the current platform.
- * @returns The instantiated class.
+ * @returns Instantiated class.
  */
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
     if (i.platform === "Workday") {

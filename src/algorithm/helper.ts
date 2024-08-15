@@ -1,5 +1,12 @@
 import type { ExtensionInfo } from "../extensionInfo";
-export enum BiographicType {None, Name, Other};
+/**
+ * - `NonBiographic`: Not censored.
+ * 
+ * - `Name`: Alpha characters are censored.
+ * 
+ * - `Other`: All chraracter are censored.
+ */
+export enum DataType {NonBiographic, Name, Other};
 
 /**
  * An abstraction that holds all common functions used by algorithm classes.
@@ -12,45 +19,35 @@ export class AlgorithmHelper {
     }
 
     /**
-     * Checks if the string is included in the config as text to flag as sensitive data.
-     * @param text - the string to check
-     * @returns the BiographicType of the string, if a match was found in config, or type None otherwise
+     * Checks if the provided label matches any of user-provided data type flags.
+     * @param label Label to check
+     * @returns `DataType` of the string, if a match is found
      */
-    checkForFlaggedText(text: string): BiographicType {
-        // -- Checking if `text` matches any element in the Name labels --
-        // a shorthand way to match `text` to all JSON entries in config.json
-        const isNameLabel = this.extensionInfo.flaggedNameLabels.reduce((a,r) => this.labelReduceCallback(a,r,text), false);
-        if (isNameLabel) return BiographicType.Name;
-
-        // -- Checking if `text` matches any element in the Other labels --
-        // a shorthand way to match `text` to all JSON entries in config.json
-        const isOtherLabel = this.extensionInfo.flaggedOtherLabels.reduce((a,r) => this.labelReduceCallback(a,r,text), false);
-        return isOtherLabel ? BiographicType.Other : BiographicType.None;
-    }
+    checkLabelForFlaggedText(label: string): DataType {
+        for (const regex of this.extensionInfo.flaggedNameLabels) {
+            if (regex.test(label)) return DataType.Name;
+        }
+        for (const regex of this.extensionInfo.flaggedOtherLabels) {
+            if (regex.test(label)) return DataType.NonBiographic;
+        }
+        return DataType.NonBiographic;
+    };
 
     /**
-     * Helper function for reducer that checks if `regexString` matches `string`.
-     * @param accumulator - flag that indicates whether a match was found or not
-     * @param regexString - the template string to compare to
-     * @param text - the string to test
-     * @returns `true` if regexString matches text, `false` otherwise
+     * Recursive function that traverses all nodes in a node tree.
+     * If the current node is a leaf, censor the node according to the `DataType`.
+     * 
+     * This function assumes that all children of the current node has the same `DataType`.
+     * 
+     * @param node Current node in traversal
+     * @param dataType Type of current node
      */
-    private labelReduceCallback(accumulator: boolean, regex: RegExp, text: string) {
-        if (accumulator) return true;
-        return regex.test(text);
-    }
-
-    /**
-     * Replaces the text in a Node, varying in replacment style depending on `BiographicType`.
-     * @param node - the HTML Node to modify
-     * @param bioType - if Name, replaces using logic involving names. Otherwise, replace everything.
-     */
-    censorNodeText(node: Node, bioType: BiographicType) {
+    censorNodeText(node: Node, dataType: DataType) {
         const children = node.childNodes;
         const value = node.nodeValue;
 
         if (children.length === 0 && value && node.nodeType === Node.TEXT_NODE) {
-            if (bioType === BiographicType.Name) {
+            if (dataType === DataType.Name) {
                 node.nodeValue = this.censorData(value);
             } else {
                 node.nodeValue = this.replaceTextWithDashes(value);
@@ -58,19 +55,18 @@ export class AlgorithmHelper {
             return;
         }
 
-        children.forEach(c => this.censorNodeText(c, bioType));
+        children.forEach(c => this.censorNodeText(c, dataType));
     }
 
     /**
-     * Replaces just the name portion of a string.
+     * Censors data according to the user-provided configuration.
+     * - `scanUsingNumericPivot`: if true, strings will be split by any number in the string
+     * - `splitBeforeNumericPivot`: if `scanUsingNumericPivot` is true, this determines which half of the string to keep at the number. Before if true, after if false
+     * - `scanUsingColonPivot`: if true, strings will be split by any colon (:) in the string
+     * - `splitBeforeColonPivot`: if `scanUsingColonPivot` is true, this determines which half of the string to use. Before if true, after if false.
      * 
-     * This function depends on the following flags:
-     * - `ScanUsingNumericPivot`: if true, strings will be split by any number in the string
-     * - `SplitBeforeNumericPivot`: if `ScanUsingNumericPivot` is true, this determines which half of the string to keep at the number. Before if true, after if false
-     * - `ScanUsingColonPivot`: if true, strings will be split by any colon (:) in the string
-     * - `SplitBeforeColonPivot`: if `ScanUsingColonPivot` is true, this determins which half of the string to use. Before if true, after if false.
-     * @param text - the string to be anonymized
-     * @returns (string) the string with the specific portion anonymized
+     * @param text String to be censored
+     * @returns Censored string
      */
     censorData(text: string): string {
         let beforeText = text;
@@ -92,18 +88,18 @@ export class AlgorithmHelper {
     }
 
     /**
-     * Replaces all text with dashes.
-     * @param source the string to be replaced
-     * @returns (string) the new string with dashes
+     * Replaces all characters in the provided string with dashes.
+     * @param source String to be replaced
+     * @returns String with replacements
      */
     private replaceTextWithDashes(source: string): string {
         return source.replace(/.+/, "-----");
     }
 
     /**
-     * Replaces all alphabet characters with dashes.
-     * @param source - the string to be replaced
-     * @returns (string) the new string with dashes
+     * Replaces all alphabet characters in the provided string with dashes.
+     * @param source String to be replaced
+     * @returns String with replacements
      */
     private replaceAlphaCharsWithDashes(source: string): string {
         return source.replace(/[a-zA-Z\-]+/g, "-----");

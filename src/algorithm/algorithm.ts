@@ -17,6 +17,6 @@ export interface Algorithm {
 };
 /**
  * Functions that create an instance of `Algorithm` that matches the current platform.
- * @returns The instantiated class.
+ * @returns Instantiated class
  */
 export type AlgorithmInstantiatorFunction = (extensionInfo: ExtensionInfo, helper: AlgorithmHelper) => Algorithm;

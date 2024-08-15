@@ -35,7 +35,7 @@ export abstract class ExtensionInfo {
     /**
      * Returns the list of algorithms required for the platform in local path form.
      * 
-     * @param config The parsed config data.
+     * @param config Parsed config data
      */
     abstract getAlgorithmPaths(config: Config): string[];
 
@@ -44,7 +44,7 @@ export abstract class ExtensionInfo {
      * 
      * e.g. WorkdayExtensionInfo returns config.splitBeforeNumericPivotWorkday.
      * 
-     * @param config The parsed config data.
+     * @param config Parsed config data
      */
     abstract getSplitBeforeNumericPivot(config: Config): boolean;
 };
@@ -89,7 +89,7 @@ class AppianExtensionInfo extends ExtensionInfo {
 
 /**
  * Creates an instance of `ExtensionInfo` that matches the current platform.
- * @returns The instantiated class.
+ * @returns Instantiated class
  */
 async function getExtensionInfo(): Promise<ExtensionInfo> {
     const config = (await import(chrome.runtime.getURL("configParser.js"))).default as Config;

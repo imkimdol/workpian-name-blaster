@@ -6,7 +6,7 @@ import type { ExtensionInfo } from "../extensionInfo";
  * An algorithm used for censoring data that matches a certain template.
  * (e.g. "`John Doe (12345678)`" or "`87654321 | Jane Doe`")
  * 
- * Uses node traversal on the entire DOM to find HTML elements that match the template.
+ * Uses recursive node traversal on the entire DOM to find node values that match the template.
  */
 abstract class SimpleTemplateDataAlgorithm implements Algorithm {
     extensionInfo: ExtensionInfo;
@@ -17,17 +17,17 @@ abstract class SimpleTemplateDataAlgorithm implements Algorithm {
         this.helper = algorithmHelper;
     };
 
-    censorData(): void {
+    censorData() {
         this.traverseNode();
     };
 
     /**
-     * Recursive function traverses all children in a node.
-     * @param node The current node. If `null`, the document body is taken.
+     * Recursive function that traverses all children in the current node.
+     * If the current node is a leaf, checks the node for a template match.
+     * 
+     * @param node Current node in traversal. If none is provided, the DOM body is used.
      */
-    traverseNode(node: null | Node = null): void {
-        if (!node) node = document.body;
-
+    private traverseNode(node: Node = document.body): void {
         const children = node.childNodes;
 
         if (children.length === 0) {
@@ -39,7 +39,7 @@ abstract class SimpleTemplateDataAlgorithm implements Algorithm {
     }
     /**
      * Checks the given leaf node's value. If the value matches the template, censors it.
-     * @param node The leaf node.
+     * @param node Leaf node
      */
     abstract checkLeafNode(node: Node): void
 };
@@ -78,7 +78,7 @@ class SimpleTemplateDataAlgorithmAppian extends SimpleTemplateDataAlgorithm {
 
 /**
  * Creates an instance of `SimpleTemplateDataAlgorithm` that matches the current platform.
- * @returns The instantiated class.
+ * @returns Instantiated class.
  */
 const getAlgorithm: AlgorithmInstantiatorFunction = (i, h) => {
     if (i.platform === "Workday") {
